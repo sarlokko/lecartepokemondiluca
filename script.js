@@ -295,7 +295,7 @@ function renderMissing() {
 }
 
 /* ============================
-   RENDER ALL
+   AVVIO
 ============================ */
 
 function renderAll() {
@@ -304,21 +304,5 @@ function renderAll() {
     renderOwned();
     renderMissing();
 }
-
-/* ============================
-   EVENTI DI RICERCA
-============================ */
-
-["home", "select", "owned", "missing"].forEach(id => {
-    document.getElementById("search-" + id).addEventListener("input", () => {
-        currentPage = 1;
-        renderAll();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-});
-
-/* ============================
-   AVVIO
-============================ */
 
 renderAll();
