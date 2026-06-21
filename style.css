@@ -86,3 +86,33 @@ nav button.active {
 .page-btn.active {
     background-color: #0d47a1;
 }
+.card-name {
+    font-weight: bold;
+    font-size: 18px;
+    margin: 5px 0 0 0;
+    text-align: center;
+}
+
+.card-id {
+    font-size: 14px;
+    color: #555;
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+.card-img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.type-row {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.type-icon {
+    width: 28px;
+    height: 28px;
+}
