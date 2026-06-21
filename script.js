@@ -1,7 +1,7 @@
 let allCards = POKEMON_LIST;
 let filtered = allCards;
 let currentPage = 1;
-const itemsPerPage = 50;
+const itemsPerPage = 50; // Hai già impostato tu questo valore
 
 renderAll();
 
@@ -140,3 +140,46 @@ function toggleOwned(id) {
     saveOwned(owned);
     renderAll();
 }
+
+/* ---------------- QR CODE ---------------- */
+
+function generateQRCode() {
+    const owned = JSON.parse(localStorage.getItem("ownedCards") || "[]");
+
+    const data = {
+        owned: owned,
+        timestamp: Date.now()
+    };
+
+    const encoded = btoa(JSON.stringify(data));
+
+    document.getElementById("qrcode").innerHTML = "";
+
+    new QRCode(document.getElementById("qrcode"), {
+        text: encoded,
+        width: 200,
+        height: 200
+    });
+}
+
+document.getElementById("qrSyncBtn").addEventListener("click", () => {
+    const box = document.getElementById("qrContainer");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+    generateQRCode();
+});
+
+// Import da QR
+(function () {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("sync")) {
+        try {
+            const decoded = JSON.parse(atob(params.get("sync")));
+            if (decoded.owned) {
+                localStorage.setItem("ownedCards", JSON.stringify(decoded.owned));
+                alert("Sincronizzazione completata!");
+            }
+        } catch (e) {
+            console.error("Errore importazione QR:", e);
+        }
+    }
+})();
