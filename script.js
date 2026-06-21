@@ -1,5 +1,5 @@
 /* ============================
-   GENERAZIONI (senza toccare pokemon-list.js)
+   GENERAZIONI AUTOMATICHE
 ============================ */
 
 const GENERATION_BREAKS = [
@@ -15,7 +15,7 @@ const GENERATION_BREAKS = [
 ];
 
 /* ============================
-   FUNZIONE PER GRUPPARE PER GENERAZIONE
+   GRUPPO PER GENERAZIONE
 ============================ */
 
 function groupByGeneration(list) {
@@ -90,33 +90,11 @@ let owned = loadOwned();
 ============================ */
 
 function createCardOrHeader(item, options = {}) {
-   if (links) {
-    const row = document.createElement("div");
-    row.className = "links-row";
-
-    const q = encodeURIComponent(p.name);
-
-    // CardTrader: ricerca per nome carta
-    const ct = document.createElement("a");
-    ct.href = "https://www.cardtrader.com/it/cards/search?text=" + q;
-    ct.target = "_blank";
-    ct.className = "link-btn";
-    ct.textContent = "CardTrader Zero";
-
-    // Cardmarket: ricerca per nome carta
-    const cm = document.createElement("a");
-    cm.href = "https://www.cardmarket.com/it/Pokemon/Products/Search?searchString=" + q;
-    cm.target = "_blank";
-    cm.className = "link-btn secondary";
-    cm.textContent = "Cardmarket";
-
-    row.appendChild(ct);
-    row.appendChild(cm);
-    div.appendChild(row);
-}
-
-}
-
+    if (item.type === "header") {
+        const h = document.createElement("div");
+        h.className = "gen-header";
+        h.textContent = item.text;
+        return h;
     }
 
     const p = item;
@@ -164,10 +142,10 @@ function createCardOrHeader(item, options = {}) {
         const row = document.createElement("div");
         row.className = "links-row";
 
-        const q = encodeURIComponent(p.name + " Pokémon card");
+        const q = encodeURIComponent(p.name);
 
         const ct = document.createElement("a");
-        ct.href = "https://www.cardtrader.com/cards/search?q=" + q;
+        ct.href = "https://www.cardtrader.com/it/cards/search?text=" + q;
         ct.target = "_blank";
         ct.className = "link-btn";
         ct.textContent = "CardTrader Zero";
