@@ -754,15 +754,12 @@ const POKEMON_LIST = [
   { id: 738, name: "Vikavolt", img: "https://img.pokemondb.net/artwork/large/vikavolt.jpg" },
   { id: 739, name: "Crabrawler", img: "https://img.pokemondb.net/artwork/large/crabrawler.jpg" },
   { id: 740, name: "Crabominable", img: "https://img.pokemondb.net/artwork/large/crabominable.jpg" },
-  { id: 741, name: "Oricorio", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/741.png
-" },
+  { id: 741, name: "Oricorio", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/741.png" },
   { id: 742, name: "Cutiefly", img: "https://img.pokemondb.net/artwork/large/cutiefly.jpg" },
   { id: 743, name: "Ribombee", img: "https://img.pokemondb.net/artwork/large/ribombee.jpg" },
   { id: 744, name: "Rockruff", img: "https://img.pokemondb.net/artwork/large/rockruff.jpg" },
-  { id: 745, name: "Lycanroc", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/745.png
-" },
-  { id: 746, name: "Wishiwashi", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/746.png
-" },
+  { id: 745, name: "Lycanroc", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/745.png" },
+  { id: 746, name: "Wishiwashi", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/746.png" },
   { id: 747, name: "Mareanie", img: "https://img.pokemondb.net/artwork/large/mareanie.jpg" },
   { id: 748, name: "Toxapex", img: "https://img.pokemondb.net/artwork/large/toxapex.jpg" },
   { id: 749, name: "Mudbray", img: "https://img.pokemondb.net/artwork/large/mudbray.jpg" },
@@ -894,11 +891,9 @@ const POKEMON_LIST = [
   { id: 872, name: "Snom", img: "https://img.pokemondb.net/artwork/large/snom.jpg" },
   { id: 873, name: "Frosmoth", img: "https://img.pokemondb.net/artwork/large/frosmoth.jpg" },
   { id: 874, name: "Stonjourner", img: "https://img.pokemondb.net/artwork/large/stonjourner.jpg" },
-  { id: 875, name: "Eiscue", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/875.png
-" },
+  { id: 875, name: "Eiscue", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/875.png" },
   { id: 876, name: "Indeedee", img: "https://img.pokemondb.net/artwork/large/indeedee.jpg" },
-  { id: 877, name: "Morpeko", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/877.png
-" },
+  { id: 877, name: "Morpeko", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/877.png" },
   { id: 878, name: "Cufant", img: "https://img.pokemondb.net/artwork/large/cufant.jpg" },
   { id: 879, name: "Copperajah", img: "https://img.pokemondb.net/artwork/large/copperajah.jpg" },
   { id: 880, name: "Dracozolt", img: "https://img.pokemondb.net/artwork/large/dracozolt.jpg" },
@@ -913,8 +908,7 @@ const POKEMON_LIST = [
   { id: 889, name: "Zamazenta", img: "https://img.pokemondb.net/artwork/large/zamazenta.jpg" },
   { id: 890, name: "Eternatus", img: "https://img.pokemondb.net/artwork/large/eternatus.jpg" },
   { id: 891, name: "Kubfu", img: "https://img.pokemondb.net/artwork/large/kubfu.jpg" },
-  { id: 892, name: "Urshifu", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/892.png
-" },
+  { id: 892, name: "Urshifu", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/892.png" },
   { id: 893, name: "Zarude", img: "https://img.pokemondb.net/artwork/large/zarude.jpg" },
   { id: 894, name: "Regieleki", img: "https://img.pokemondb.net/artwork/large/regieleki.jpg" },
   { id: 895, name: "Regidrago", img: "https://img.pokemondb.net/artwork/large/regidrago.jpg" },
@@ -927,8 +921,7 @@ const POKEMON_LIST = [
   { id: 902, name: "Basculegion", img: "https://img.pokemondb.net/artwork/large/basculegion.jpg" },
   { id: 903, name: "Sneasler", img: "https://img.pokemondb.net/artwork/large/sneasler.jpg" },
   { id: 904, name: "Overqwil", img: "https://img.pokemondb.net/artwork/large/overqwil.jpg" },
-  { id: 905, name: "Enamorus", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/905.png
-" },
+  { id: 905, name: "Enamorus", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/905.png" },
 
   /* NONA GENERAZIONE */
 
@@ -1039,20 +1032,16 @@ const POKEMON_LIST = [
   { id: 1010, name: "Iron Leaves", img: "https://img.pokemondb.net/artwork/large/iron-leaves.jpg" },
   { id: 1011, name: "Dipplin", img: "https://img.pokemondb.net/artwork/large/dipplin.jpg" },
   { id: 1012, name: "Poltchageist", img: "https://img.pokemondb.net/artwork/large/poltchageist.jpg" },
-  { id: 1013, name: "Sinistcha", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1013.png
-" },
+  { id: 1013, name: "Sinistcha", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1013.png" },
   { id: 1014, name: "Okidogi", img: "https://img.pokemondb.net/artwork/large/okidogi.jpg" },
   { id: 1015, name: "Munkidori", img: "https://img.pokemondb.net/artwork/large/munkidori.jpg" },
   { id: 1016, name: "Fezandipiti", img: "https://img.pokemondb.net/artwork/large/fezandipiti.jpg" },
   { id: 1017, name: "Ogerpon", img: "https://img.pokemondb.net/artwork/large/ogerpon.jpg" },
   { id: 1018, name: "Archaludon", img: "https://img.pokemondb.net/artwork/large/archaludon.jpg" },
-  { id: 1019, name: "Hydrapple", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1014.png
-" },
-  { id: 1020, name: "Gouging Fire", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1020.png
-" },
+  { id: 1019, name: "Hydrapple", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1014.png" },
+  { id: 1020, name: "Gouging Fire", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1020.png" },
   { id: 1021, name: "Raging Bolt", img: "https://img.pokemondb.net/artwork/large/raging-bolt.jpg" },
-  { id: 1022, name: "Iron Boulder", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1021.png
-" },
+  { id: 1022, name: "Iron Boulder", img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1021.png" },
   { id: 1023, name: "Iron Crown", img: "https://img.pokemondb.net/artwork/large/iron-crown.jpg" },
   { id: 1024, name: "Terapagos", img: "https://img.pokemondb.net/artwork/large/terapagos.jpg" },
   { id: 1025, name: "Pecharunt", img: "https://img.pokemondb.net/artwork/large/pecharunt.jpg" },
