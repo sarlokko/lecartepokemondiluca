@@ -4,7 +4,6 @@
 
 let allCards = POKEMON_LIST; // ← usa la variabile del file JS
 let filtered = allCards;
-let currentTab = "home";
 let currentPage = 1;
 const itemsPerPage = 20;
 
