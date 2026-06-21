@@ -52,25 +52,21 @@ function createCard(p, options = {}) {
     const div = document.createElement("div");
     div.className = "pokemon-card";
 
-    // immagine
     const img = document.createElement("img");
     img.src = p.img;
     img.alt = p.name;
     div.appendChild(img);
 
-    // nome
     const name = document.createElement("div");
     name.className = "pokemon-name";
     name.textContent = p.name;
     div.appendChild(name);
 
-    // id
     const id = document.createElement("div");
     id.className = "pokemon-id";
     id.textContent = "#" + p.id.toString().padStart(4, "0");
     div.appendChild(id);
 
-    // checkbox
     if (checkbox) {
         const row = document.createElement("label");
         row.className = "checkbox-row";
@@ -91,7 +87,6 @@ function createCard(p, options = {}) {
         div.appendChild(row);
     }
 
-    // link marketplace
     if (links) {
         const row = document.createElement("div");
         row.className = "links-row";
@@ -128,10 +123,10 @@ function getPaginatedPokemon(list) {
     return list.slice(start, end);
 }
 
-function renderPagination(totalItems, renderFunction) {
+function renderPagination(totalItems, renderFunction, containerId) {
     const totalPages = Math.ceil(totalItems / pageSize);
 
-    const container = document.getElementById("pagination");
+    const container = document.getElementById(containerId);
     container.innerHTML = "";
 
     if (totalPages <= 1) return;
@@ -176,7 +171,7 @@ function renderHome() {
     const paginated = getPaginatedPokemon(filtered);
     paginated.forEach(p => list.appendChild(createCard(p)));
 
-    renderPagination(filtered.length, renderHome);
+    renderPagination(filtered.length, renderHome, "pagination-home");
 }
 
 /* ============================
@@ -195,7 +190,7 @@ function renderSelect() {
     const paginated = getPaginatedPokemon(filtered);
     paginated.forEach(p => list.appendChild(createCard(p, { checkbox: true })));
 
-    renderPagination(filtered.length, renderSelect);
+    renderPagination(filtered.length, renderSelect, "pagination-select");
 }
 
 /* ============================
@@ -219,7 +214,7 @@ function renderOwned() {
 
     empty.style.display = ownedList.length === 0 ? "block" : "none";
 
-    renderPagination(filtered.length, renderOwned);
+    renderPagination(filtered.length, renderOwned, "pagination-owned");
 }
 
 /* ============================
@@ -243,7 +238,7 @@ function renderMissing() {
 
     empty.style.display = missingList.length === 0 ? "block" : "none";
 
-    renderPagination(filtered.length, renderMissing);
+    renderPagination(filtered.length, renderMissing, "pagination-missing");
 }
 
 /* ============================
@@ -251,7 +246,6 @@ function renderMissing() {
 ============================ */
 
 function renderAll() {
-    currentPage = 1; // reset pagina quando fai ricerca
     renderHome();
     renderSelect();
     renderOwned();
