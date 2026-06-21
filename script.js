@@ -296,6 +296,50 @@ function renderMissing() {
     empty.style.display = missingList.length === 0 ? "block" : "none";
 
     renderPagination(filtered.length, renderMissing, "pagination-missing");
+   // Funzione per esportare i posseduti come QR
+function generateQRCode() {
+    const owned = JSON.parse(localStorage.getItem("ownedCards") || "[]");
+
+    const data = {
+        owned: owned,
+        timestamp: Date.now()
+    };
+
+    const encoded = btoa(JSON.stringify(data));
+
+    // Pulisce il QR precedente
+    document.getElementById("qrcode").innerHTML = "";
+
+    new QRCode(document.getElementById("qrcode"), {
+        text: encoded,
+        width: 200,
+        height: 200
+    });
+}
+
+// Mostra QR quando clicchi il pulsante
+document.getElementById("qrSyncBtn").addEventListener("click", () => {
+    const box = document.getElementById("qrContainer");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+    generateQRCode();
+});
+
+// Import automatico se arrivi con ?sync=
+(function () {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("sync")) {
+        try {
+            const decoded = JSON.parse(atob(params.get("sync")));
+            if (decoded.owned) {
+                localStorage.setItem("ownedCards", JSON.stringify(decoded.owned));
+                alert("Sincronizzazione completata!");
+            }
+        } catch (e) {
+            console.error("Errore importazione QR:", e);
+        }
+    }
+})();
+
 }
 
 /* ============================
