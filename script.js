@@ -1,6 +1,48 @@
 /* ============================
+   GENERAZIONI (senza toccare pokemon-list.js)
+============================ */
+
+const GENERATION_BREAKS = [
+    { gen: 1, start: 1, end: 151 },
+    { gen: 2, start: 152, end: 251 },
+    { gen: 3, start: 252, end: 386 },
+    { gen: 4, start: 387, end: 493 },
+    { gen: 5, start: 494, end: 649 },
+    { gen: 6, start: 650, end: 721 },
+    { gen: 7, start: 722, end: 809 },
+    { gen: 8, start: 810, end: 905 },
+    { gen: 9, start: 906, end: 1025 }
+];
+
+/* ============================
+   FUNZIONE PER GRUPPARE PER GENERAZIONE
+============================ */
+
+function groupByGeneration(list) {
+    const result = [];
+    let currentGen = null;
+
+    list.forEach(p => {
+        const gen = GENERATION_BREAKS.find(g => p.id >= g.start && p.id <= g.end)?.gen;
+
+        if (gen !== currentGen) {
+            currentGen = gen;
+            result.push({
+                type: "header",
+                text: "Generazione " + gen
+            });
+        }
+
+        result.push(p);
+    });
+
+    return result;
+}
+
+/* ============================
    GESTIONE TAB
 ============================ */
+
 let currentPage = 1;
 const pageSize = 100;
 
@@ -44,10 +86,18 @@ function saveOwned() {
 let owned = loadOwned();
 
 /* ============================
-   CARD
+   CARD O HEADER
 ============================ */
 
-function createCard(p, options = {}) {
+function createCardOrHeader(item, options = {}) {
+    if (item.type === "header") {
+        const h = document.createElement("div");
+        h.className = "gen-header";
+        h.textContent = item.text;
+        return h;
+    }
+
+    const p = item;
     const { checkbox = false, links = false } = options;
 
     const div = document.createElement("div");
@@ -171,8 +221,10 @@ function renderHome() {
         p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
     );
 
-    const paginated = getPaginatedPokemon(filtered);
-    paginated.forEach(p => list.appendChild(createCard(p)));
+    const grouped = groupByGeneration(filtered);
+    const paginated = getPaginatedPokemon(grouped);
+
+    paginated.forEach(item => list.appendChild(createCardOrHeader(item)));
 
     renderPagination(filtered.length, renderHome, "pagination-home");
 }
@@ -186,8 +238,12 @@ function renderSelect() {
         p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
     );
 
-    const paginated = getPaginatedPokemon(filtered);
-    paginated.forEach(p => list.appendChild(createCard(p, { checkbox: true })));
+    const grouped = groupByGeneration(filtered);
+    const paginated = getPaginatedPokemon(grouped);
+
+    paginated.forEach(item =>
+        list.appendChild(createCardOrHeader(item, { checkbox: true }))
+    );
 
     renderPagination(filtered.length, renderSelect, "pagination-select");
 }
@@ -203,9 +259,11 @@ function renderOwned() {
         p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
     );
 
-    const paginated = getPaginatedPokemon(filtered);
+    const grouped = groupByGeneration(filtered);
+    const paginated = getPaginatedPokemon(grouped);
+
     list.innerHTML = "";
-    paginated.forEach(p => list.appendChild(createCard(p))); // <-- NIENTE LINKS
+    paginated.forEach(item => list.appendChild(createCardOrHeader(item)));
 
     empty.style.display = ownedList.length === 0 ? "block" : "none";
 
@@ -223,9 +281,13 @@ function renderMissing() {
         p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
     );
 
-    const paginated = getPaginatedPokemon(filtered);
+    const grouped = groupByGeneration(filtered);
+    const paginated = getPaginatedPokemon(grouped);
+
     list.innerHTML = "";
-    paginated.forEach(p => list.appendChild(createCard(p, { links: true })));
+    paginated.forEach(item =>
+        list.appendChild(createCardOrHeader(item, { links: true }))
+    );
 
     empty.style.display = missingList.length === 0 ? "block" : "none";
 
