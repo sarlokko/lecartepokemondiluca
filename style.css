@@ -3,13 +3,13 @@
 ============================ */
 
 body {
+    body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-image: url("https://i.imgur.com/0Zf0xqM.jpeg");
-    background-size: cover;
-    background-position: center;
+    background: #1e3a8a; /* Blu profondo elegante */
     background-attachment: fixed;
 }
+
 
 /* ============================
    HEADER
