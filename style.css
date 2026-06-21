@@ -1,0 +1,172 @@
+/* ====== STILE GENERALE ====== */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, Arial, sans-serif;
+    background: #0b1020;
+    color: #f5f5f5;
+}
+
+header {
+    text-align: center;
+    padding: 20px 10px;
+}
+
+header h1 {
+    color: #ffcc00;
+    margin-bottom: 5px;
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+}
+
+header p {
+    color: #9aa0c2;
+}
+
+/* ====== TABS ====== */
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+.tabs button {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ddd;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tabs button.active {
+    background: #ffcc00;
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+}
+
+.tabs button:hover:not(.active) {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ====== CONTENUTO ====== */
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 10px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+/* ====== CAMPO DI RICERCA ====== */
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+input[type="text"]:focus {
+    border-color: #ffcc00;
+    outline: none;
+}
+
+/* ====== LISTA POKÉMON ====== */
+
+.pokemon-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.pokemon-card {
+    background: #151b30;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+}
+
+.pokemon-card img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.pokemon-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.pokemon-id {
+    font-size: 0.8rem;
+    color: #9aa0c2;
+    margin-bottom: 8px;
+}
+
+/* ====== CHECKBOX ====== */
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.checkbox-row input {
+    transform: scale(1.2);
+    accent-color: #ffcc00;
+}
+
+/* ====== LINK AI MARKETPLACE ====== */
+
+.links-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.link-btn {
+    flex: 1;
+    padding: 6px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    text-align: center;
+    background: #ffe680;
+    color: #000;
+    border: 1px solid #ffcc00;
+}
+
+.link-btn.secondary {
+    background: #fff;
+    border-color: #ddd;
+}
+
+/* ====== EMPTY STATE ====== */
+
+.empty {
+    text-align: center;
+    color: #9aa0c2;
+    margin-top: 20px;
+}
