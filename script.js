@@ -145,7 +145,11 @@ function createCardOrHeader(item, options = {}) {
         const q = encodeURIComponent(p.name);
 
         const ct = document.createElement("a");
-        ct.href = "https://www.cardtrader.com/it/cards/search?text=" + q;
+ct.href = "https://www.cardtrader.com/cards?q=" + q;
+ct.target = "_blank";
+ct.className = "link-btn";
+ct.textContent = "CardTrader Zero";
+
         ct.target = "_blank";
         ct.className = "link-btn";
         ct.textContent = "CardTrader Zero";
