@@ -11,9 +11,15 @@
 
 <body>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
-        <h1>Le Carte Pokémon di Luca</h1>
+    <!-- TITOLO CENTRATO + QR A DESTRA -->
+    <div style="position: relative; padding: 0 20px; margin-top: 10px;">
+        <h1 style="text-align: center; margin: 0;">Le Carte Pokémon di Luca</h1>
+
         <button id="qrSyncBtn" style="
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
             padding: 8px 14px;
             background-color: #007bff;
             color: white;
@@ -24,13 +30,16 @@
         ">Aggiorna 🔄</button>
     </div>
 
+    <!-- QR CODE -->
     <div id="qrContainer" style="display:none; margin-top: 15px; text-align:center;">
         <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
         <div id="qrcode"></div>
     </div>
 
+    <!-- RICERCA -->
     <input type="text" id="search" placeholder="Cerca una carta...">
 
+    <!-- NAVIGAZIONE -->
     <nav>
         <button onclick="showTab('home')" id="tab-home" class="active">Home</button>
         <button onclick="showTab('select')" id="tab-select">Seleziona</button>
@@ -38,31 +47,37 @@
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
     </nav>
 
+    <!-- TAB HOME -->
     <div id="home" class="tab">
         <div id="list-home" class="list-container"></div>
         <div id="pagination-home"></div>
     </div>
 
+    <!-- TAB SELECT -->
     <div id="select" class="tab" style="display:none;">
         <div id="list-select" class="list-container"></div>
         <div id="pagination-select"></div>
     </div>
 
+    <!-- TAB OWNED -->
     <div id="owned" class="tab" style="display:none;">
         <div id="list-owned" class="list-container"></div>
         <div id="pagination-owned"></div>
     </div>
 
+    <!-- TAB MISSING -->
     <div id="missing" class="tab" style="display:none;">
         <div id="list-missing" class="list-container"></div>
         <div id="pagination-missing"></div>
     </div>
 
+    <!-- SCRIPT PRINCIPALE -->
     <script src="script.js"></script>
 
-    <!-- Libreria QR -->
+    <!-- LIBRERIA QR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
+    <!-- FUNZIONE CAMBIO TAB -->
     <script>
         function showTab(tab) {
             document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
