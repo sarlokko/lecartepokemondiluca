@@ -6,84 +6,70 @@
     <title>Le Carte Pokémon di Luca</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Libreria QR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 
 <body>
 
-<header>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-    <h1>Le Carte Pokémon di Luca</h1>
-    <button id="qrSyncBtn" style="
-        padding: 8px 14px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 14px;
-    ">Aggiornamento 🔄</button>
-</div>
+    <!-- HEADER CON TITOLO + BOTTONE -->
+    <div class="header-bar">
+        <h1>Le Carte Pokémon di Luca</h1>
+        <button id="qrSyncBtn">Aggiornamento 🔄</button>
+    </div>
 
-<!-- Contenitore QR nascosto -->
-<div id="qrContainer" style="display:none; margin-top: 15px; text-align:center;">
-    <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
-    <div id="qrcode"></div>
-</div>
+    <!-- QR CODE -->
+    <div id="qrContainer" style="display:none;">
+        <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
+        <div id="qrcode"></div>
+    </div>
 
-    <p>Gestisci la collezione completa dei 1025 Pokémon</p>
-</header>
+    <!-- BARRA DI RICERCA -->
+    <input type="text" id="search" placeholder="Cerca una carta...">
 
-<!-- TAB -->
-<nav class="tabs">
-    <button data-tab="home" class="active">Home</button>
-    <button data-tab="select">Seleziona carte</button>
-    <button data-tab="owned">Carte possedute</button>
-    <button data-tab="missing">Carte mancanti</button>
-</nav>
+    <!-- NAVIGAZIONE -->
+    <nav>
+        <button onclick="showTab('home')" id="tab-home" class="active">Home</button>
+        <button onclick="showTab('select')" id="tab-select">Seleziona</button>
+        <button onclick="showTab('owned')" id="tab-owned">Possedute</button>
+        <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
+    </nav>
 
-<!-- CONTENUTO -->
-<main>
+    <!-- CONTENITORI DELLE LISTE -->
+    <div id="home" class="tab">
+        <div id="list-home" class="list-container"></div>
+        <div id="pagination-home"></div>
+    </div>
 
-    <!-- HOME -->
-    <section id="home" class="tab-content active">
-        <h2>Elenco completo Pokémon</h2>
-        <input type="text" id="search-home" placeholder="Cerca Pokémon...">
-        <div id="list-home" class="pokemon-list"></div>
-        <div id="pagination-home" class="pagination"></div>
-    </section>
+    <div id="select" class="tab" style="display:none;">
+        <div id="list-select" class="list-container"></div>
+        <div id="pagination-select"></div>
+    </div>
 
-    <!-- SELEZIONA -->
-    <section id="select" class="tab-content">
-        <h2>Seleziona le carte possedute</h2>
-        <input type="text" id="search-select" placeholder="Cerca Pokémon...">
-        <div id="list-select" class="pokemon-list"></div>
-        <div id="pagination-select" class="pagination"></div>
-    </section>
+    <div id="owned" class="tab" style="display:none;">
+        <div id="list-owned" class="list-container"></div>
+        <div id="pagination-owned"></div>
+    </div>
 
-    <!-- POSSEDUTE -->
-    <section id="owned" class="tab-content">
-        <h2>Carte possedute</h2>
-        <input type="text" id="search-owned" placeholder="Filtra Pokémon...">
-        <p id="empty-owned" class="empty">Nessuna carta selezionata</p>
-        <div id="list-owned" class="pokemon-list"></div>
-        <div id="pagination-owned" class="pagination"></div>
-    </section>
+    <div id="missing" class="tab" style="display:none;">
+        <div id="list-missing" class="list-container"></div>
+        <div id="pagination-missing"></div>
+    </div>
 
-    <!-- MANCANTI -->
-    <section id="missing" class="tab-content">
-        <h2>Carte mancanti</h2>
-        <input type="text" id="search-missing" placeholder="Filtra Pokémon...">
-        <p id="empty-missing" class="empty">Hai tutte le carte! 🎉</p>
-        <div id="list-missing" class="pokemon-list"></div>
-        <div id="pagination-missing" class="pagination"></div>
-    </section>
+    <!-- SCRIPT PRINCIPALE -->
+    <script src="script.js"></script>
 
-</main>
+    <script>
+        // Cambio tab
+        function showTab(tab) {
+            document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
+            document.getElementById(tab).style.display = "block";
 
-<!-- SCRIPT -->
-<script src="pokemon-list.js"></script>
-<script src="script.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+            document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+            document.getElementById("tab-" + tab).classList.add("active");
+        }
+    </script>
 
 </body>
 </html>
