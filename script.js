@@ -90,11 +90,29 @@ let owned = loadOwned();
 ============================ */
 
 function createCardOrHeader(item, options = {}) {
-    if (item.type === "header") {
-        const h = document.createElement("div");
-        h.className = "gen-header";
-        h.textContent = item.text;
-        return h;
+    if (links) {
+    const row = document.createElement("div");
+    row.className = "links-row";
+
+    const q = encodeURIComponent(p.name);
+
+    const ct = document.createElement("a");
+    ct.href = "https://www.cardtrader.com/it/cards/search?q=" + q;
+    ct.target = "_blank";
+    ct.className = "link-btn";
+    ct.textContent = "CardTrader Zero";
+
+    const cm = document.createElement("a");
+    cm.href = "https://www.cardmarket.com/it/Pokemon/Products/Search?searchString=" + q;
+    cm.target = "_blank";
+    cm.className = "link-btn secondary";
+    cm.textContent = "Cardmarket";
+
+    row.appendChild(ct);
+    row.appendChild(cm);
+    div.appendChild(row);
+}
+
     }
 
     const p = item;
