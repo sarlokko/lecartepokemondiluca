@@ -227,10 +227,13 @@ function generateQRCode() {
 
     const encoded = btoa(JSON.stringify(data));
 
+    // URL COMPLETO PER IMPORT AUTOMATICO
+    const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca?sync=${encoded}`;
+
     document.getElementById("qrcode").innerHTML = "";
 
     new QRCode(document.getElementById("qrcode"), {
-        text: encoded,
+        text: syncUrl,
         width: 200,
         height: 200
     });
