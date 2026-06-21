@@ -11,7 +11,25 @@
 <body>
 
 <header>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
     <h1>Le Carte Pokémon di Luca</h1>
+    <button id="qrSyncBtn" style="
+        padding: 8px 14px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    ">Aggiornamento 🔄</button>
+</div>
+
+<!-- Contenitore QR nascosto -->
+<div id="qrContainer" style="display:none; margin-top: 15px; text-align:center;">
+    <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
+    <div id="qrcode"></div>
+</div>
+
     <p>Gestisci la collezione completa dei 1025 Pokémon</p>
 </header>
 
@@ -65,6 +83,7 @@
 <!-- SCRIPT -->
 <script src="pokemon-list.js"></script>
 <script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 </body>
 </html>
