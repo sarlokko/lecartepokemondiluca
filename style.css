@@ -1,19 +1,16 @@
-/* ====== RESET ====== */
 body {
-    margin: 0;
-    padding: 0;
     font-family: Arial, sans-serif;
     background-color: #e3f2fd;
+    margin: 0;
+    padding: 0;
 }
 
-/* ====== TITOLO ====== */
 h1 {
     text-align: center;
     padding: 20px 0;
     margin: 0;
 }
 
-/* ====== NAVIGAZIONE ====== */
 nav {
     display: flex;
     justify-content: center;
@@ -35,7 +32,6 @@ nav button.active {
     background-color: #0d47a1;
 }
 
-/* ====== BARRA DI RICERCA ====== */
 #search {
     width: 80%;
     max-width: 400px;
@@ -47,14 +43,12 @@ nav button.active {
     font-size: 16px;
 }
 
-/* ====== LISTE ====== */
 .list-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-/* ====== CARD ====== */
 .card {
     background: white;
     border: 2px solid #90caf9;
@@ -70,7 +64,6 @@ nav button.active {
     border-radius: 8px;
 }
 
-/* ====== SELEZIONE ====== */
 .selectable {
     cursor: pointer;
 }
@@ -80,7 +73,6 @@ nav button.active {
     background-color: #c8e6c9;
 }
 
-/* ====== PAGINAZIONE ====== */
 .page-btn {
     padding: 6px 10px;
     margin: 3px;
