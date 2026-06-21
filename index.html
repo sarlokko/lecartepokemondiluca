@@ -6,32 +6,15 @@
     <title>Le Carte Pokémon di Luca</title>
 
     <link rel="stylesheet" href="style.css">
-
-    <!-- Libreria QR -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <!-- LISTA CARTE (deve venire PRIMA di script.js) -->
     <script src="pokemon-list.js"></script>
 </head>
 
 <body>
 
-    <!-- HEADER CON TITOLO + BOTTONE -->
-    <div class="header-bar">
-        <h1>Le Carte Pokémon di Luca</h1>
-        <button id="qrSyncBtn">Aggiornamento 🔄</button>
-    </div>
+    <h1>Le Carte Pokémon di Luca</h1>
 
-    <!-- QR CODE -->
-    <div id="qrContainer" style="display:none;">
-        <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
-        <div id="qrcode"></div>
-    </div>
-
-    <!-- BARRA DI RICERCA -->
     <input type="text" id="search" placeholder="Cerca una carta...">
 
-    <!-- NAVIGAZIONE -->
     <nav>
         <button onclick="showTab('home')" id="tab-home" class="active">Home</button>
         <button onclick="showTab('select')" id="tab-select">Seleziona</button>
@@ -39,7 +22,6 @@
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
     </nav>
 
-    <!-- CONTENITORI DELLE LISTE -->
     <div id="home" class="tab">
         <div id="list-home" class="list-container"></div>
         <div id="pagination-home"></div>
@@ -60,11 +42,9 @@
         <div id="pagination-missing"></div>
     </div>
 
-    <!-- SCRIPT PRINCIPALE -->
     <script src="script.js"></script>
 
     <script>
-        // Cambio tab
         function showTab(tab) {
             document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
             document.getElementById(tab).style.display = "block";
