@@ -2,20 +2,13 @@
 // CARICAMENTO LISTA POKEMON
 // =========================
 
-let allCards = [];
-let filtered = [];
+let allCards = POKEMON_LIST; // ← usa la variabile del file JS
+let filtered = allCards;
 let currentTab = "home";
 let currentPage = 1;
 const itemsPerPage = 20;
 
-// Carica lista carte
-fetch("pokemon-list.js")
-    .then(res => res.json())
-    .then(data => {
-        allCards = data;
-        filtered = allCards;
-        renderAll();
-    });
+renderAll();
 
 // =========================
 // GESTIONE LOCAL STORAGE
@@ -181,7 +174,6 @@ function toggleOwned(id) {
 // QR CODE SYNC
 // =========================
 
-// Genera QR con i posseduti
 function generateQRCode() {
     const owned = getOwned();
 
@@ -201,12 +193,14 @@ function generateQRCode() {
     });
 }
 
-// Mostra QR
-document.getElementById("qrSyncBtn").addEventListener("click", () => {
-    const box = document.getElementById("qrContainer");
-    box.style.display = box.style.display === "none" ? "block" : "none";
-    generateQRCode();
-});
+const qrBtn = document.getElementById("qrSyncBtn");
+if (qrBtn) {
+    qrBtn.addEventListener("click", () => {
+        const box = document.getElementById("qrContainer");
+        box.style.display = box.style.display === "none" ? "block" : "none";
+        generateQRCode();
+    });
+}
 
 // Import automatico via ?sync=
 (function () {
@@ -221,13 +215,6 @@ document.getElementById("qrSyncBtn").addEventListener("click", () => {
             }
         } catch (e) {
             console.error("Errore importazione QR:", e);
-        }const qrBtn = document.getElementById("qrSyncBtn");
-if (qrBtn) {
-    qrBtn.addEventListener("click", () => {
-        const box = document.getElementById("qrContainer");
-        box.style.display = box.style.display === "none" ? "block" : "none";
-        generateQRCode();
-    });
-
+        }
     }
 })();
