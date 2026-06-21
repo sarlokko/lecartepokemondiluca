@@ -1,6 +1,8 @@
 /* ============================
    GESTIONE TAB
 ============================ */
+let currentPage = 1;
+const pageSize = 100;
 
 const tabs = document.querySelectorAll(".tabs button");
 const sections = document.querySelectorAll(".tab-content");
@@ -15,6 +17,7 @@ tabs.forEach(btn => {
         sections.forEach(sec => sec.classList.remove("active"));
         document.getElementById(tab).classList.add("active");
 
+        currentPage = 1; // reset pagina quando cambi tab
         renderAll();
     });
 });
@@ -115,25 +118,89 @@ function createCard(p, options = {}) {
     return div;
 }
 
+/* ============================
+   PAGINAZIONE
+============================ */
+
+function getPaginatedPokemon(list) {
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    return list.slice(start, end);
+}
+
+function renderPagination(totalItems, renderFunction) {
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    const container = document.getElementById("pagination");
+    container.innerHTML = "";
+
+    if (totalPages <= 1) return;
+
+    const prev = document.createElement("button");
+    prev.textContent = "← Indietro";
+    prev.disabled = currentPage === 1;
+    prev.onclick = () => {
+        currentPage--;
+        renderFunction();
+    };
+
+    const next = document.createElement("button");
+    next.textContent = "Avanti →";
+    next.disabled = currentPage === totalPages;
+    next.onclick = () => {
+        currentPage++;
+        renderFunction();
+    };
+
+    const info = document.createElement("span");
+    info.textContent = `Pagina ${currentPage} di ${totalPages}`;
+
+    container.appendChild(prev);
+    container.appendChild(info);
+    container.appendChild(next);
+}
+
+/* ============================
+   RENDER HOME
+============================ */
+
 function renderHome() {
     const q = document.getElementById("search-home").value.toLowerCase();
     const list = document.getElementById("list-home");
     list.innerHTML = "";
 
-    POKEMON_LIST.filter(p =>
+    const filtered = POKEMON_LIST.filter(p =>
         p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
-    ).forEach(p => list.appendChild(createCard(p)));
+    );
+
+    const paginated = getPaginatedPokemon(filtered);
+    paginated.forEach(p => list.appendChild(createCard(p)));
+
+    renderPagination(filtered.length, renderHome);
 }
+
+/* ============================
+   RENDER SELECT
+============================ */
 
 function renderSelect() {
     const q = document.getElementById("search-select").value.toLowerCase();
     const list = document.getElementById("list-select");
     list.innerHTML = "";
 
-    POKEMON_LIST.filter(p =>
+    const filtered = POKEMON_LIST.filter(p =>
         p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
-    ).forEach(p => list.appendChild(createCard(p, { checkbox: true })));
+    );
+
+    const paginated = getPaginatedPokemon(filtered);
+    paginated.forEach(p => list.appendChild(createCard(p, { checkbox: true })));
+
+    renderPagination(filtered.length, renderSelect);
 }
+
+/* ============================
+   RENDER OWNED
+============================ */
 
 function renderOwned() {
     const q = document.getElementById("search-owned").value.toLowerCase();
@@ -142,14 +209,22 @@ function renderOwned() {
 
     const ownedList = POKEMON_LIST.filter(p => owned[p.id]);
 
-    list.innerHTML = "";
+    const filtered = ownedList.filter(p =>
+        p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
+    );
 
-    ownedList
-        .filter(p => p.name.toLowerCase().includes(q) || p.id.toString().includes(q))
-        .forEach(p => list.appendChild(createCard(p, { links: true })));
+    const paginated = getPaginatedPokemon(filtered);
+    list.innerHTML = "";
+    paginated.forEach(p => list.appendChild(createCard(p, { links: true })));
 
     empty.style.display = ownedList.length === 0 ? "block" : "none";
+
+    renderPagination(filtered.length, renderOwned);
 }
+
+/* ============================
+   RENDER MISSING
+============================ */
 
 function renderMissing() {
     const q = document.getElementById("search-missing").value.toLowerCase();
@@ -158,16 +233,25 @@ function renderMissing() {
 
     const missingList = POKEMON_LIST.filter(p => !owned[p.id]);
 
-    list.innerHTML = "";
+    const filtered = missingList.filter(p =>
+        p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
+    );
 
-    missingList
-        .filter(p => p.name.toLowerCase().includes(q) || p.id.toString().includes(q))
-        .forEach(p => list.appendChild(createCard(p, { links: true })));
+    const paginated = getPaginatedPokemon(filtered);
+    list.innerHTML = "";
+    paginated.forEach(p => list.appendChild(createCard(p, { links: true })));
 
     empty.style.display = missingList.length === 0 ? "block" : "none";
+
+    renderPagination(filtered.length, renderMissing);
 }
 
+/* ============================
+   RENDER ALL
+============================ */
+
 function renderAll() {
+    currentPage = 1; // reset pagina quando fai ricerca
     renderHome();
     renderSelect();
     renderOwned();
@@ -179,7 +263,10 @@ function renderAll() {
 ============================ */
 
 ["home", "select", "owned", "missing"].forEach(id => {
-    document.getElementById("search-" + id).addEventListener("input", renderAll);
+    document.getElementById("search-" + id).addEventListener("input", () => {
+        currentPage = 1;
+        renderAll();
+    });
 });
 
 /* ============================
