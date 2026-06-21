@@ -52,7 +52,7 @@ function renderHome() {
     pageItems.forEach(card => {
         container.innerHTML += `
             <div class="card">
-                <img src="${card.image}" alt="${card.name}">
+                <img src="${card.img}" alt="${card.name}">
                 <p>${card.name}</p>
             </div>
         `;
@@ -72,7 +72,7 @@ function renderSelect() {
         const isOwned = owned.includes(card.id);
         container.innerHTML += `
             <div class="card selectable ${isOwned ? "owned" : ""}" onclick="toggleOwned(${card.id})">
-                <img src="${card.image}" alt="${card.name}">
+                <img src="${card.img}" alt="${card.name}">
                 <p>${card.name}</p>
             </div>
         `;
@@ -92,7 +92,7 @@ function renderOwned() {
     pageItems.forEach(card => {
         container.innerHTML += `
             <div class="card">
-                <img src="${card.image}" alt="${card.name}">
+                <img src="${card.img}" alt="${card.name}">
                 <p>${card.name}</p>
             </div>
         `;
@@ -112,7 +112,7 @@ function renderMissing() {
     pageItems.forEach(card => {
         container.innerHTML += `
             <div class="card">
-                <img src="${card.image}" alt="${card.name}">
+                <img src="${card.img}" alt="${card.name}">
                 <p>${card.name}</p>
             </div>
         `;
