@@ -208,12 +208,9 @@ input[type="text"]:focus {
 }
 /* SFONDO GENERALE CON TANTI POKEMON */
 body {
-    background-image: url("https://img.pokemondb.net/sprites/home/normal/pikachu.png"),
-                      url("https://img.pokemondb.net/sprites/home/normal/charmander.png"),
-                      url("https://img.pokemondb.net/sprites/home/normal/bulbasaur.png"),
-                      url("https://img.pokemondb.net/sprites/home/normal/squirtle.png");
-    background-repeat: repeat;
-    background-size: 120px;
-    background-position: center;
+    background-image: url("https://i.imgur.com/8bHqVQp.png");
+    background-size: cover;
     background-attachment: fixed;
+    background-position: center;
 }
+
