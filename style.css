@@ -1,3 +1,7 @@
+/* ===========================
+   GENERALE
+=========================== */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #e3f2fd;
@@ -10,6 +14,10 @@ h1 {
     padding: 20px 0;
     margin: 0;
 }
+
+/* ===========================
+   NAVIGAZIONE
+=========================== */
 
 nav {
     display: flex;
@@ -26,11 +34,16 @@ nav button {
     color: white;
     border-radius: 6px;
     cursor: pointer;
+    font-size: 15px;
 }
 
 nav button.active {
     background-color: #0d47a1;
 }
+
+/* ===========================
+   RICERCA
+=========================== */
 
 #search {
     width: 80%;
@@ -43,26 +56,74 @@ nav button.active {
     font-size: 16px;
 }
 
+/* ===========================
+   LISTE
+=========================== */
+
 .list-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
+/* ===========================
+   CARD
+=========================== */
+
 .card {
     background: white;
     border: 2px solid #90caf9;
-    border-radius: 10px;
-    padding: 10px;
+    border-radius: 12px;
+    padding: 12px;
     text-align: center;
-    width: 140px;
-    margin: 10px;
+    width: 150px;
+    margin: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.15s ease;
 }
 
-.card img {
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Nome Pokémon */
+.card-name {
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Numero Pokémon */
+.card-id {
+    font-size: 14px;
+    color: #555;
+    margin: 4px 0 10px 0;
+}
+
+/* Immagine Pokémon */
+.card-img {
     width: 100%;
     border-radius: 8px;
 }
+
+/* Tipi Pokémon */
+.type-row {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.type-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    image-rendering: crisp-edges;
+}
+
+/* ===========================
+   SELEZIONABILI
+=========================== */
 
 .selectable {
     cursor: pointer;
@@ -72,6 +133,10 @@ nav button.active {
     border-color: #2e7d32;
     background-color: #c8e6c9;
 }
+
+/* ===========================
+   PAGINAZIONE
+=========================== */
 
 .page-btn {
     padding: 6px 10px;
@@ -85,34 +150,4 @@ nav button.active {
 
 .page-btn.active {
     background-color: #0d47a1;
-}
-.card-name {
-    font-weight: bold;
-    font-size: 18px;
-    margin: 5px 0 0 0;
-    text-align: center;
-}
-
-.card-id {
-    font-size: 14px;
-    color: #555;
-    margin: 0 0 10px 0;
-    text-align: center;
-}
-
-.card-img {
-    width: 100%;
-    border-radius: 8px;
-}
-
-.type-row {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-}
-
-.type-icon {
-    width: 28px;
-    height: 28px;
 }
