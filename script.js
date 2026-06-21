@@ -228,7 +228,7 @@ function generateQRCode() {
     const encoded = btoa(JSON.stringify(data));
 
     // URL COMPLETO PER IMPORT AUTOMATICO
-    const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca?sync=${encoded}`;
+   const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca/?sync=${encoded}`;
 
     document.getElementById("qrcode").innerHTML = "";
 
