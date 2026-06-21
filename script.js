@@ -221,6 +221,13 @@ document.getElementById("qrSyncBtn").addEventListener("click", () => {
             }
         } catch (e) {
             console.error("Errore importazione QR:", e);
-        }
+        }const qrBtn = document.getElementById("qrSyncBtn");
+if (qrBtn) {
+    qrBtn.addEventListener("click", () => {
+        const box = document.getElementById("qrContainer");
+        box.style.display = box.style.display === "none" ? "block" : "none";
+        generateQRCode();
+    });
+
     }
 })();
