@@ -1,7 +1,3 @@
-/* ===========================
-   STILE GENERALE
-=========================== */
-
 body {
     font-family: Arial, sans-serif;
     background-color: #e3f2fd;
@@ -10,65 +6,10 @@ body {
 }
 
 h1 {
+    text-align: center;
+    padding: 20px 0;
     margin: 0;
-    padding: 10px 0;
-    font-size: 26px;
-    text-align: center;
 }
-
-/* ===========================
-   HEADER CON TITOLO + BOTTONE
-=========================== */
-
-.header-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    padding: 15px 10px;
-    background-color: #bbdefb;
-    border-bottom: 2px solid #90caf9;
-}
-
-.header-bar h1 {
-    width: 100%;
-    text-align: center;
-}
-
-#qrSyncBtn {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 8px 14px;
-    background-color: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-#qrSyncBtn:hover {
-    background-color: #0d47a1;
-}
-
-/* ===========================
-   CONTENITORE QR
-=========================== */
-
-#qrContainer {
-    background: white;
-    border: 2px solid #90caf9;
-    border-radius: 10px;
-    padding: 15px;
-    width: 260px;
-    margin: 15px auto;
-}
-
-/* ===========================
-   NAVIGAZIONE TABS
-=========================== */
 
 nav {
     display: flex;
@@ -91,9 +32,22 @@ nav button.active {
     background-color: #0d47a1;
 }
 
-/* ===========================
-   LISTE CARTE
-=========================== */
+#search {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 15px auto;
+    display: block;
+    border: 2px solid #90caf9;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
 .card {
     background: white;
@@ -110,16 +64,6 @@ nav button.active {
     border-radius: 8px;
 }
 
-.list-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-/* ===========================
-   CARTE SELEZIONABILI
-=========================== */
-
 .selectable {
     cursor: pointer;
 }
@@ -128,10 +72,6 @@ nav button.active {
     border-color: #2e7d32;
     background-color: #c8e6c9;
 }
-
-/* ===========================
-   PAGINAZIONE
-=========================== */
 
 .page-btn {
     padding: 6px 10px;
@@ -145,19 +85,4 @@ nav button.active {
 
 .page-btn.active {
     background-color: #0d47a1;
-}
-
-/* ===========================
-   BARRA DI RICERCA
-=========================== */
-
-#search {
-    width: 80%;
-    max-width: 400px;
-    padding: 10px;
-    margin: 15px auto;
-    display: block;
-    border: 2px solid #90caf9;
-    border-radius: 6px;
-    font-size: 16px;
 }
