@@ -205,7 +205,7 @@ function renderOwned() {
 
     const paginated = getPaginatedPokemon(filtered);
     list.innerHTML = "";
-    paginated.forEach(p => list.appendChild(createCard(p, { links: true })));
+    paginated.forEach(p => list.appendChild(createCard(p))); // <-- NIENTE LINKS
 
     empty.style.display = ownedList.length === 0 ? "block" : "none";
 
