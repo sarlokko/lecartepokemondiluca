@@ -1,304 +1,189 @@
-/* ============================
-   GENERAZIONI AUTOMATICHE
-============================ */
+// =========================
+// CARICAMENTO LISTA POKEMON
+// =========================
 
-const GENERATION_BREAKS = [
-    { gen: 1, start: 1, end: 151 },
-    { gen: 2, start: 152, end: 251 },
-    { gen: 3, start: 252, end: 386 },
-    { gen: 4, start: 387, end: 493 },
-    { gen: 5, start: 494, end: 649 },
-    { gen: 6, start: 650, end: 721 },
-    { gen: 7, start: 722, end: 809 },
-    { gen: 8, start: 810, end: 905 },
-    { gen: 9, start: 906, end: 1025 }
-];
-
-/* ============================
-   GRUPPO PER GENERAZIONE
-============================ */
-
-function groupByGeneration(list) {
-    const result = [];
-    let currentGen = null;
-
-    list.forEach(p => {
-        const gen = GENERATION_BREAKS.find(g => p.id >= g.start && p.id <= g.end)?.gen;
-
-        if (gen !== currentGen) {
-            currentGen = gen;
-            result.push({
-                type: "header",
-                text: "Generazione " + gen
-            });
-        }
-
-        result.push(p);
-    });
-
-    return result;
-}
-
-/* ============================
-   GESTIONE TAB
-============================ */
-
+let allCards = [];
+let filtered = [];
+let currentTab = "home";
 let currentPage = 1;
-const pageSize = 100;
+const itemsPerPage = 20;
 
-const tabs = document.querySelectorAll(".tabs button");
-const sections = document.querySelectorAll(".tab-content");
-
-tabs.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const tab = btn.dataset.tab;
-
-        tabs.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        sections.forEach(sec => sec.classList.remove("active"));
-        document.getElementById(tab).classList.add("active");
-
-        currentPage = 1;
+// Carica lista carte
+fetch("pokemon-list.js")
+    .then(res => res.json())
+    .then(data => {
+        allCards = data;
+        filtered = allCards;
         renderAll();
-        window.scrollTo({ top: 0, behavior: "smooth" });
     });
-});
 
-/* ============================
-   STORAGE
-============================ */
+// =========================
+// GESTIONE LOCAL STORAGE
+// =========================
 
-const STORAGE_KEY = "pokemon_owned_luca";
-
-function loadOwned() {
-    try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    } catch {
-        return {};
-    }
+function getOwned() {
+    return JSON.parse(localStorage.getItem("ownedCards") || "[]");
 }
 
-function saveOwned() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(owned));
+function saveOwned(list) {
+    localStorage.setItem("ownedCards", JSON.stringify(list));
 }
 
-let owned = loadOwned();
+// =========================
+// RENDERING PAGINE
+// =========================
 
-/* ============================
-   CARD O HEADER
-============================ */
-
-function createCardOrHeader(item, options = {}) {
-    if (item.type === "header") {
-        const h = document.createElement("div");
-        h.className = "gen-header";
-        h.textContent = item.text;
-        return h;
-    }
-
-    const p = item;
-    const { checkbox = false, links = false } = options;
-
-    const div = document.createElement("div");
-    div.className = "pokemon-card";
-
-    const img = document.createElement("img");
-    img.src = p.img;
-    img.alt = p.name;
-    div.appendChild(img);
-
-    const name = document.createElement("div");
-    name.className = "pokemon-name";
-    name.textContent = p.name;
-    div.appendChild(name);
-
-    const id = document.createElement("div");
-    id.className = "pokemon-id";
-    id.textContent = "#" + p.id.toString().padStart(4, "0");
-    div.appendChild(id);
-
-    if (checkbox) {
-        const row = document.createElement("label");
-        row.className = "checkbox-row";
-
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.checked = !!owned[p.id];
-
-        cb.addEventListener("change", () => {
-            if (cb.checked) owned[p.id] = true;
-            else delete owned[p.id];
-            saveOwned();
-            renderAll();
-        });
-
-        row.appendChild(cb);
-        row.appendChild(document.createTextNode("Posseduta"));
-        div.appendChild(row);
-    }
-
-    if (links) {
-        const row = document.createElement("div");
-        row.className = "links-row";
-
-        const q = encodeURIComponent(p.name);
-
-        const ct = document.createElement("a");
-ct.href = "https://www.cardtrader.com/cards?q=" + q;
-ct.target = "_blank";
-ct.className = "link-btn";
-ct.textContent = "CardTrader Zero";
-
-        ct.target = "_blank";
-        ct.className = "link-btn";
-        ct.textContent = "CardTrader Zero";
-
-        const cm = document.createElement("a");
-        cm.href = "https://www.cardmarket.com/it/Pokemon/Products/Search?searchString=" + q;
-        cm.target = "_blank";
-        cm.className = "link-btn secondary";
-        cm.textContent = "Cardmarket";
-
-        row.appendChild(ct);
-        row.appendChild(cm);
-        div.appendChild(row);
-    }
-
-    return div;
+function renderAll() {
+    renderHome();
+    renderSelect();
+    renderOwned();
+    renderMissing();
 }
 
-/* ============================
-   PAGINAZIONE
-============================ */
+// HOME
+function renderHome() {
+    const container = document.getElementById("list-home");
+    container.innerHTML = "";
 
-function getPaginatedPokemon(list) {
-    const start = (currentPage - 1) * pageSize;
-    const end = start + pageSize;
-    return list.slice(start, end);
+    const pageItems = paginate(filtered);
+    pageItems.forEach(card => {
+        container.innerHTML += `
+            <div class="card">
+                <img src="${card.image}" alt="${card.name}">
+                <p>${card.name}</p>
+            </div>
+        `;
+    });
+
+    renderPagination(filtered.length, renderHome, "pagination-home");
+}
+
+// SELEZIONA
+function renderSelect() {
+    const container = document.getElementById("list-select");
+    container.innerHTML = "";
+
+    const owned = getOwned();
+    const pageItems = paginate(filtered);
+
+    pageItems.forEach(card => {
+        const isOwned = owned.includes(card.id);
+        container.innerHTML += `
+            <div class="card selectable ${isOwned ? "owned" : ""}" onclick="toggleOwned(${card.id})">
+                <img src="${card.image}" alt="${card.name}">
+                <p>${card.name}</p>
+            </div>
+        `;
+    });
+
+    renderPagination(filtered.length, renderSelect, "pagination-select");
+}
+
+// POSSEDUTI
+function renderOwned() {
+    const owned = getOwned();
+    const ownedCards = allCards.filter(c => owned.includes(c.id));
+
+    const container = document.getElementById("list-owned");
+    container.innerHTML = "";
+
+    const pageItems = paginate(ownedCards);
+    pageItems.forEach(card => {
+        container.innerHTML += `
+            <div class="card">
+                <img src="${card.image}" alt="${card.name}">
+                <p>${card.name}</p>
+            </div>
+        `;
+    });
+
+    renderPagination(ownedCards.length, renderOwned, "pagination-owned");
+}
+
+// MANCANTI
+function renderMissing() {
+    const owned = getOwned();
+    const missingCards = allCards.filter(c => !owned.includes(c.id));
+
+    const container = document.getElementById("list-missing");
+    container.innerHTML = "";
+
+    const pageItems = paginate(missingCards);
+    pageItems.forEach(card => {
+        container.innerHTML += `
+            <div class="card">
+                <img src="${card.image}" alt="${card.name}">
+                <p>${card.name}</p>
+            </div>
+        `;
+    });
+
+    renderPagination(missingCards.length, renderMissing, "pagination-missing");
+}
+
+// =========================
+// PAGINAZIONE
+// =========================
+
+function paginate(list) {
+    const start = (currentPage - 1) * itemsPerPage;
+    return list.slice(start, start + itemsPerPage);
 }
 
 function renderPagination(totalItems, renderFunction, containerId) {
-    const totalPages = Math.ceil(totalItems / pageSize);
-
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
     const container = document.getElementById(containerId);
     container.innerHTML = "";
 
     if (totalPages <= 1) return;
 
-    const prev = document.createElement("button");
-    prev.textContent = "← Indietro";
-    prev.disabled = currentPage === 1;
-    prev.onclick = () => {
-        currentPage--;
-        renderFunction();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
-    const next = document.createElement("button");
-    next.textContent = "Avanti →";
-    next.disabled = currentPage === totalPages;
-    next.onclick = () => {
-        currentPage++;
-        renderFunction();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
-    const info = document.createElement("span");
-    info.textContent = `Pagina ${currentPage} di ${totalPages}`;
-
-    container.appendChild(prev);
-    container.appendChild(info);
-    container.appendChild(next);
+    for (let i = 1; i <= totalPages; i++) {
+        container.innerHTML += `
+            <button class="page-btn ${i === currentPage ? "active" : ""}" onclick="changePage(${i}, '${renderFunction.name}')">${i}</button>
+        `;
+    }
 }
 
-/* ============================
-   RENDER FUNZIONI
-============================ */
-
-function renderHome() {
-    const q = document.getElementById("search-home").value.toLowerCase();
-    const list = document.getElementById("list-home");
-    list.innerHTML = "";
-
-    const filtered = POKEMON_LIST.filter(p =>
-        p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
-    );
-
-    const grouped = groupByGeneration(filtered);
-    const paginated = getPaginatedPokemon(grouped);
-
-    paginated.forEach(item => list.appendChild(createCardOrHeader(item)));
-
-    renderPagination(filtered.length, renderHome, "pagination-home");
+function changePage(page, fnName) {
+    currentPage = page;
+    window[fnName]();
 }
 
-function renderSelect() {
-    const q = document.getElementById("search-select").value.toLowerCase();
-    const list = document.getElementById("list-select");
-    list.innerHTML = "";
+// =========================
+// RICERCA
+// =========================
 
-    const filtered = POKEMON_LIST.filter(p =>
-        p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
-    );
+document.getElementById("search").addEventListener("input", e => {
+    const q = e.target.value.toLowerCase();
+    filtered = allCards.filter(c => c.name.toLowerCase().includes(q));
+    currentPage = 1;
+    renderAll();
+});
 
-    const grouped = groupByGeneration(filtered);
-    const paginated = getPaginatedPokemon(grouped);
+// =========================
+// GESTIONE POSSEDUTI
+// =========================
 
-    paginated.forEach(item =>
-        list.appendChild(createCardOrHeader(item, { checkbox: true }))
-    );
+function toggleOwned(id) {
+    let owned = getOwned();
 
-    renderPagination(filtered.length, renderSelect, "pagination-select");
+    if (owned.includes(id)) {
+        owned = owned.filter(x => x !== id);
+    } else {
+        owned.push(id);
+    }
+
+    saveOwned(owned);
+    renderAll();
 }
 
-function renderOwned() {
-    const q = document.getElementById("search-owned").value.toLowerCase();
-    const list = document.getElementById("list-owned");
-    const empty = document.getElementById("empty-owned");
+// =========================
+// QR CODE SYNC
+// =========================
 
-    const ownedList = POKEMON_LIST.filter(p => owned[p.id]);
-
-    const filtered = ownedList.filter(p =>
-        p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
-    );
-
-    const grouped = groupByGeneration(filtered);
-    const paginated = getPaginatedPokemon(grouped);
-
-    list.innerHTML = "";
-    paginated.forEach(item => list.appendChild(createCardOrHeader(item)));
-
-    empty.style.display = ownedList.length === 0 ? "block" : "none";
-
-    renderPagination(filtered.length, renderOwned, "pagination-owned");
-}
-
-function renderMissing() {
-    const q = document.getElementById("search-missing").value.toLowerCase();
-    const list = document.getElementById("list-missing");
-    const empty = document.getElementById("empty-missing");
-
-    const missingList = POKEMON_LIST.filter(p => !owned[p.id]);
-
-    const filtered = missingList.filter(p =>
-        p.name.toLowerCase().includes(q) || p.id.toString().includes(q)
-    );
-
-    const grouped = groupByGeneration(filtered);
-    const paginated = getPaginatedPokemon(grouped);
-
-    list.innerHTML = "";
-    paginated.forEach(item =>
-        list.appendChild(createCardOrHeader(item, { links: true }))
-    );
-
-    empty.style.display = missingList.length === 0 ? "block" : "none";
-
-    renderPagination(filtered.length, renderMissing, "pagination-missing");
-   // Funzione per esportare i posseduti come QR
+// Genera QR con i posseduti
 function generateQRCode() {
-    const owned = JSON.parse(localStorage.getItem("ownedCards") || "[]");
+    const owned = getOwned();
 
     const data = {
         owned: owned,
@@ -307,7 +192,6 @@ function generateQRCode() {
 
     const encoded = btoa(JSON.stringify(data));
 
-    // Pulisce il QR precedente
     document.getElementById("qrcode").innerHTML = "";
 
     new QRCode(document.getElementById("qrcode"), {
@@ -317,40 +201,26 @@ function generateQRCode() {
     });
 }
 
-// Mostra QR quando clicchi il pulsante
+// Mostra QR
 document.getElementById("qrSyncBtn").addEventListener("click", () => {
     const box = document.getElementById("qrContainer");
     box.style.display = box.style.display === "none" ? "block" : "none";
     generateQRCode();
 });
 
-// Import automatico se arrivi con ?sync=
+// Import automatico via ?sync=
 (function () {
     const params = new URLSearchParams(window.location.search);
     if (params.has("sync")) {
         try {
             const decoded = JSON.parse(atob(params.get("sync")));
             if (decoded.owned) {
-                localStorage.setItem("ownedCards", JSON.stringify(decoded.owned));
+                saveOwned(decoded.owned);
                 alert("Sincronizzazione completata!");
+                renderAll();
             }
         } catch (e) {
             console.error("Errore importazione QR:", e);
         }
     }
 })();
-
-}
-
-/* ============================
-   AVVIO
-============================ */
-
-function renderAll() {
-    renderHome();
-    renderSelect();
-    renderOwned();
-    renderMissing();
-}
-
-renderAll();
