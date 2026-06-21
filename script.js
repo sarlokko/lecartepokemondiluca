@@ -5,12 +5,12 @@
 let allCards = POKEMON_LIST;
 let filtered = allCards;
 let currentPage = 1;
-const itemsPerPage = 50; // come hai impostato tu
+const itemsPerPage = 50;
 
-// Cache per non rifare richieste
+// Cache tipi per evitare richieste duplicate
 const typeCache = {};
 
-// Icone ufficiali Pokémon HOME (Opzione A)
+// Icone ufficiali Pokémon HOME
 const TYPE_ICONS = {
     normal: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/normal.png",
     fire: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/fire.png",
@@ -109,9 +109,9 @@ async function cardHTML(card, selectable = false, owned = false) {
         .join("");
 
     return `
-        <div class="card ${selectable ? "selectable" : ""} ${owned ? "owned" : ""}" 
+        <div class="card ${selectable ? "selectable" : ""} ${owned ? "owned" : ""}"
              ${selectable ? `onclick="toggleOwned(${card.id})"` : ""}>
-             
+
             <p class="card-name">${card.name}</p>
             <p class="card-id">#${card.id}</p>
 
@@ -212,6 +212,7 @@ function toggleOwned(id) {
     saveOwned(owned);
     renderAll();
 }
+
 /* ===========================
    QR CODE SYNC
 =========================== */
