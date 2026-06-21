@@ -1,7 +1,7 @@
 let allCards = POKEMON_LIST;
 let filtered = allCards;
 let currentPage = 1;
-const itemsPerPage = 20;
+const itemsPerPage = 50;
 
 renderAll();
 
