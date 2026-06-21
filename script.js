@@ -90,18 +90,20 @@ let owned = loadOwned();
 ============================ */
 
 function createCardOrHeader(item, options = {}) {
-    if (links) {
+   if (links) {
     const row = document.createElement("div");
     row.className = "links-row";
 
     const q = encodeURIComponent(p.name);
 
+    // CardTrader: ricerca per nome carta
     const ct = document.createElement("a");
-    ct.href = "https://www.cardtrader.com/it/cards/search?q=" + q;
+    ct.href = "https://www.cardtrader.com/it/cards/search?text=" + q;
     ct.target = "_blank";
     ct.className = "link-btn";
     ct.textContent = "CardTrader Zero";
 
+    // Cardmarket: ricerca per nome carta
     const cm = document.createElement("a");
     cm.href = "https://www.cardmarket.com/it/Pokemon/Products/Search?searchString=" + q;
     cm.target = "_blank";
@@ -111,6 +113,8 @@ function createCardOrHeader(item, options = {}) {
     row.appendChild(ct);
     row.appendChild(cm);
     div.appendChild(row);
+}
+
 }
 
     }
