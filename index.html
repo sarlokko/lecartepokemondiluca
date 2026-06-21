@@ -5,62 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Carte Pokémon di Luca</title>
 
-    <!-- Collega il CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <header>
-        <h1>Le Carte Pokémon di Luca</h1>
-        <p>Gestisci la collezione completa dei 1025 Pokémon</p>
-    </header>
+<header>
+    <h1>Le Carte Pokémon di Luca</h1>
+    <p>Gestisci la collezione completa dei 1025 Pokémon</p>
+</header>
 
-    <!-- TAB -->
-    <nav class="tabs">
-        <button data-tab="home" class="active">Home</button>
-        <button data-tab="select">Seleziona carte</button>
-        <button data-tab="owned">Carte possedute</button>
-        <button data-tab="missing">Carte mancanti</button>
-    </nav>
+<!-- TAB -->
+<nav class="tabs">
+    <button data-tab="home" class="active">Home</button>
+    <button data-tab="select">Seleziona carte</button>
+    <button data-tab="owned">Carte possedute</button>
+    <button data-tab="missing">Carte mancanti</button>
+</nav>
 
-    <!-- CONTENUTO -->
-    <main>
+<!-- CONTENUTO -->
+<main>
 
-        <!-- HOME -->
-        <section id="home" class="tab-content active">
-            <h2>Elenco completo Pokémon</h2>
-            <input type="text" id="search-home" placeholder="Cerca Pokémon...">
-            <div id="list-home" class="pokemon-list"></div>
-        </section>
+    <!-- HOME -->
+    <section id="home" class="tab-content active">
+        <h2>Elenco completo Pokémon</h2>
+        <input type="text" id="search-home" placeholder="Cerca Pokémon...">
+        <div id="list-home" class="pokemon-list"></div>
+        <div id="pagination"></div>
+    </section>
 
-        <!-- SELEZIONA -->
-        <section id="select" class="tab-content">
-            <h2>Seleziona le carte possedute</h2>
-            <input type="text" id="search-select" placeholder="Cerca Pokémon...">
-            <div id="list-select" class="pokemon-list"></div>
-        </section>
+    <!-- SELEZIONA -->
+    <section id="select" class="tab-content">
+        <h2>Seleziona le carte possedute</h2>
+        <input type="text" id="search-select" placeholder="Cerca Pokémon...">
+        <div id="list-select" class="pokemon-list"></div>
+        <div id="pagination"></div>
+    </section>
 
-        <!-- POSSEDUTE -->
-        <section id="owned" class="tab-content">
-            <h2>Carte possedute</h2>
-            <input type="text" id="search-owned" placeholder="Filtra Pokémon...">
-            <div id="list-owned" class="pokemon-list"></div>
-            <p id="empty-owned" class="empty">Nessuna carta selezionata</p>
-        </section>
+    <!-- POSSEDUTE -->
+    <section id="owned" class="tab-content">
+        <h2>Carte possedute</h2>
+        <input type="text" id="search-owned" placeholder="Filtra Pokémon...">
+        <p id="empty-owned" class="empty">Nessuna carta selezionata</p>
+        <div id="list-owned" class="pokemon-list"></div>
+        <div id="pagination"></div>
+    </section>
 
-        <!-- MANCANTI -->
-        <section id="missing" class="tab-content">
-            <h2>Carte mancanti</h2>
-            <input type="text" id="search-missing" placeholder="Filtra Pokémon...">
-            <div id="list-missing" class="pokemon-list"></div>
-            <p id="empty-missing" class="empty">Hai tutte le carte! 🎉</p>
-        </section>
+    <!-- MANCANTI -->
+    <section id="missing" class="tab-content">
+        <h2>Carte mancanti</h2>
+        <input type="text" id="search-missing" placeholder="Filtra Pokémon...">
+        <p id="empty-missing" class="empty">Hai tutte le carte! 🎉</p>
+        <div id="list-missing" class="pokemon-list"></div>
+        <div id="pagination"></div>
+    </section>
 
-    </main>
+</main>
 
-    <!-- SCRIPT -->
-    <script src="pokemon-list.js"></script>
-    <script src="script.js"></script>
+<!-- SCRIPT -->
+<script src="pokemon-list.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
