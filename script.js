@@ -17,13 +17,14 @@ tabs.forEach(btn => {
         sections.forEach(sec => sec.classList.remove("active"));
         document.getElementById(tab).classList.add("active");
 
-        currentPage = 1; // reset pagina quando cambi tab
+        currentPage = 1;
         renderAll();
+        window.scrollTo({ top: 0, behavior: "smooth" });
     });
 });
 
 /* ============================
-   STORAGE CARTE POSSEDUTE
+   STORAGE
 ============================ */
 
 const STORAGE_KEY = "pokemon_owned_luca";
@@ -43,7 +44,7 @@ function saveOwned() {
 let owned = loadOwned();
 
 /* ============================
-   FUNZIONI DI RENDER
+   CARD
 ============================ */
 
 function createCard(p, options = {}) {
@@ -137,6 +138,7 @@ function renderPagination(totalItems, renderFunction, containerId) {
     prev.onclick = () => {
         currentPage--;
         renderFunction();
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const next = document.createElement("button");
@@ -145,6 +147,7 @@ function renderPagination(totalItems, renderFunction, containerId) {
     next.onclick = () => {
         currentPage++;
         renderFunction();
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const info = document.createElement("span");
@@ -156,7 +159,7 @@ function renderPagination(totalItems, renderFunction, containerId) {
 }
 
 /* ============================
-   RENDER HOME
+   RENDER FUNZIONI
 ============================ */
 
 function renderHome() {
@@ -174,10 +177,6 @@ function renderHome() {
     renderPagination(filtered.length, renderHome, "pagination-home");
 }
 
-/* ============================
-   RENDER SELECT
-============================ */
-
 function renderSelect() {
     const q = document.getElementById("search-select").value.toLowerCase();
     const list = document.getElementById("list-select");
@@ -192,10 +191,6 @@ function renderSelect() {
 
     renderPagination(filtered.length, renderSelect, "pagination-select");
 }
-
-/* ============================
-   RENDER OWNED
-============================ */
 
 function renderOwned() {
     const q = document.getElementById("search-owned").value.toLowerCase();
@@ -216,10 +211,6 @@ function renderOwned() {
 
     renderPagination(filtered.length, renderOwned, "pagination-owned");
 }
-
-/* ============================
-   RENDER MISSING
-============================ */
 
 function renderMissing() {
     const q = document.getElementById("search-missing").value.toLowerCase();
@@ -260,6 +251,7 @@ function renderAll() {
     document.getElementById("search-" + id).addEventListener("input", () => {
         currentPage = 1;
         renderAll();
+        window.scrollTo({ top: 0, behavior: "smooth" });
     });
 });
 
