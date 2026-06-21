@@ -11,7 +11,23 @@
 
 <body>
 
-    <h1>Le Carte Pokémon di Luca</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+        <h1>Le Carte Pokémon di Luca</h1>
+        <button id="qrSyncBtn" style="
+            padding: 8px 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        ">Aggiorna 🔄</button>
+    </div>
+
+    <div id="qrContainer" style="display:none; margin-top: 15px; text-align:center;">
+        <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
+        <div id="qrcode"></div>
+    </div>
 
     <input type="text" id="search" placeholder="Cerca una carta...">
 
@@ -43,6 +59,9 @@
     </div>
 
     <script src="script.js"></script>
+
+    <!-- Libreria QR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <script>
         function showTab(tab) {
