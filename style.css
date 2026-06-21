@@ -3,13 +3,11 @@
 ============================ */
 
 body {
-    body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #3b82f6;
+    background-color: #1e3a8a; /* Blu profondo */
     background-attachment: fixed;
 }
-
 
 /* ============================
    HEADER
