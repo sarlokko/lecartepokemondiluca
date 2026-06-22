@@ -124,8 +124,10 @@ async function renderGeneration() {
     const [start, end] = GENERATIONS[currentGen];
     const cards = allCards.filter(c => c.id >= start && c.id <= end);
 
+    const owned = getOwned();
+
     for (const card of cards) {
-        container.innerHTML += await cardHTML(card);
+        container.innerHTML += await cardHTML(card, true, owned.includes(card.id));
     }
 }
 
@@ -147,7 +149,10 @@ async function renderSelect() {
 
     const owned = getOwned();
 
-    for (const card of filtered) {
+    // FIX: se filtered è vuoto → usa allCards
+    const list = filtered.length > 0 ? filtered : allCards;
+
+    for (const card of list) {
         container.innerHTML += await cardHTML(card, true, owned.includes(card.id));
     }
 }
