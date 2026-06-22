@@ -18,7 +18,6 @@ const GENERATIONS = {
     9: [906, 1025]
 };
 
-// Colori titolo generazione
 const GEN_COLORS = {
     1: "gen1",
     2: "gen2",
@@ -33,10 +32,9 @@ const GEN_COLORS = {
 
 let currentGen = 1;
 
-// Cache tipi per evitare richieste duplicate
+// Cache tipi
 const typeCache = {};
 
-// Icone ufficiali Pokémon HOME
 const TYPE_ICONS = {
     normal: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/normal.png",
     fire: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/fire.png",
@@ -59,7 +57,7 @@ const TYPE_ICONS = {
 };
 
 /* ===========================
-   FETCH TIPI AUTOMATICO
+   FETCH TIPI
 =========================== */
 
 async function getPokemonTypes(id) {
@@ -72,10 +70,34 @@ async function getPokemonTypes(id) {
 
         typeCache[id] = types;
         return types;
-    } catch (e) {
-        console.error("Errore tipi Pokémon:", e);
+    } catch {
         return [];
     }
+}
+
+/* ===========================
+   CARD TEMPLATE (DEVE STARE QUI!)
+=========================== */
+
+async function cardHTML(card, selectable = false, owned = false) {
+    const types = await getPokemonTypes(card.id);
+
+    const typeIconsHTML = types
+        .map(t => `<img src="${TYPE_ICONS[t]}" class="type-icon">`)
+        .join("");
+
+    return `
+        <div class="card ${selectable ? "selectable" : ""} ${owned ? "owned" : ""}"
+             ${selectable ? `onclick="toggleOwned(${card.id})"` : ""}>
+
+            <p class="card-name">${card.name}</p>
+            <p class="card-id">#${card.id}</p>
+
+            <img src="${card.img}" alt="${card.name}" class="card-img">
+
+            <div class="type-row">${typeIconsHTML}</div>
+        </div>
+    `;
 }
 
 /* ===========================
@@ -85,35 +107,30 @@ async function getPokemonTypes(id) {
 function selectGen(gen) {
     currentGen = gen;
 
-    // aggiorna titolo
     const title = document.getElementById("gen-title");
     title.textContent = `Generazione ${gen}`;
+    title.className = GEN_COLORS[gen];
 
-    // reset classi colore
-    title.className = "";
-    title.classList.add(GEN_COLORS[gen]);
-
-    // aggiorna bottoni menu
     document.querySelectorAll("#gen-menu button").forEach(btn => btn.classList.remove("active"));
     document.querySelector(`#gen-menu button:nth-child(${gen})`).classList.add("active");
 
     renderGeneration();
 }
 
-function renderGeneration() {
+async function renderGeneration() {
     const container = document.getElementById("list-gen");
     container.innerHTML = "";
 
     const [start, end] = GENERATIONS[currentGen];
     const cards = allCards.filter(c => c.id >= start && c.id <= end);
 
-    cards.forEach(async card => {
+    for (const card of cards) {
         container.innerHTML += await cardHTML(card);
-    });
+    }
 }
 
 /* ===========================
-   RENDERING ORIGINALE (TABS)
+   TABS ORIGINALI
 =========================== */
 
 function getOwned() {
@@ -199,11 +216,7 @@ function toggleOwned(id) {
 function generateQRCode() {
     const owned = JSON.parse(localStorage.getItem("ownedCards") || "[]");
 
-    const data = {
-        owned: owned,
-        timestamp: Date.now()
-    };
-
+    const data = { owned, timestamp: Date.now() };
     const encoded = btoa(JSON.stringify(data));
 
     const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca/?sync=${encoded}`;
@@ -223,7 +236,10 @@ document.getElementById("qrSyncBtn").addEventListener("click", () => {
     generateQRCode();
 });
 
-/* IMPORT AUTOMATICO DA URL ?sync= */
+/* ===========================
+   INIT
+=========================== */
+
 (function () {
     const params = new URLSearchParams(window.location.search);
 
@@ -234,18 +250,13 @@ document.getElementById("qrSyncBtn").addEventListener("click", () => {
                 localStorage.setItem("ownedCards", JSON.stringify(decoded.owned));
                 alert("Sincronizzazione completata!");
             }
-        } catch (e) {
-            console.error("Errore importazione QR:", e);
-        }
+        } catch {}
     }
 
-    // lettura generazione da URL
     if (params.has("gen")) {
         const g = parseInt(params.get("gen"));
         if (g >= 1 && g <= 9) currentGen = g;
     }
 
-    // avvia generazione
     selectGen(currentGen);
-
 })();
