@@ -180,3 +180,16 @@ nav button.active {
 .gen7 { color: #9c27b0; }
 .gen8 { color: #795548; }
 .gen9 { color: #009688; }
+
+.card {
+    pointer-events: auto !important;
+}
+
+.list-container {
+    pointer-events: auto !important;
+}
+
+body, html {
+    pointer-events: auto !important;
+}
+
