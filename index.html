@@ -24,7 +24,7 @@
         <button onclick="selectGen(9)">GEN 9</button>
     </div>
 
-    <!-- TITOLO CENTRATO + QR A DESTRA -->
+    <!-- TITOLO + QR -->
     <div style="position: relative; padding: 0 20px; margin-top: 60px;">
         <h1 id="gen-title" style="text-align: center; margin: 0;">Le Carte Pokémon di Luca</h1>
 
@@ -95,7 +95,6 @@
             document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
             document.getElementById("tab-" + tab).classList.add("active");
 
-            // RENDER SPECIFICO PER OGNI TAB
             if (tab === "select") renderSelect();
             if (tab === "owned") renderOwned();
             if (tab === "missing") renderMissing();
