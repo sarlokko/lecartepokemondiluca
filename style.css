@@ -1,3 +1,7 @@
+/* ===========================
+   GENERALE
+=========================== */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #e3f2fd;
@@ -10,6 +14,10 @@ h1 {
     padding: 20px 0;
     margin: 0;
 }
+
+/* ===========================
+   NAVIGAZIONE
+=========================== */
 
 nav {
     display: flex;
@@ -33,6 +41,10 @@ nav button.active {
     background-color: #0d47a1;
 }
 
+/* ===========================
+   RICERCA
+=========================== */
+
 #search {
     width: 80%;
     max-width: 400px;
@@ -44,11 +56,19 @@ nav button.active {
     font-size: 16px;
 }
 
+/* ===========================
+   LISTE
+=========================== */
+
 .list-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
+
+/* ===========================
+   CARD
+=========================== */
 
 .card {
     background: white;
@@ -66,23 +86,27 @@ nav button.active {
     transform: scale(1.05);
 }
 
+/* Nome Pokémon */
 .card-name {
     font-weight: bold;
     font-size: 18px;
     margin: 0;
 }
 
+/* Numero Pokémon */
 .card-id {
     font-size: 14px;
     color: #555;
     margin: 4px 0 10px 0;
 }
 
+/* Immagine Pokémon */
 .card-img {
     width: 100%;
     border-radius: 8px;
 }
 
+/* Tipi Pokémon */
 .type-row {
     margin-top: 10px;
     display: flex;
@@ -97,6 +121,10 @@ nav button.active {
     image-rendering: crisp-edges;
 }
 
+/* ===========================
+   SELEZIONABILI
+=========================== */
+
 .selectable {
     cursor: pointer;
 }
@@ -106,35 +134,20 @@ nav button.active {
     background-color: #c8e6c9;
 }
 
-.gen-menu {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: #ffffffee;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    backdrop-filter: blur(6px);
-    border-bottom: 2px solid #90caf9;
-}
+/* ===========================
+   PAGINAZIONE
+=========================== */
 
-.gen-menu button {
-    padding: 10px 18px;
-    font-size: 16px;
+.page-btn {
+    padding: 6px 10px;
+    margin: 3px;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background-color: #1976d2;
+    background-color: #64b5f6;
     color: white;
-    transition: transform 0.15s ease, background-color 0.2s;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.gen-menu button:hover {
-    transform: scale(1.08);
+.page-btn.active {
     background-color: #0d47a1;
-}
-
-.gen-menu button.active {
-    background-color: #004ba0;
 }
