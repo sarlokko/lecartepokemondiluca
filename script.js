@@ -4,8 +4,34 @@
 
 let allCards = POKEMON_LIST;
 let filtered = allCards;
-let currentPage = 1;
-const itemsPerPage = 50;
+
+// GENERAZIONI
+const GENERATIONS = {
+    1: [1, 151],
+    2: [152, 251],
+    3: [252, 386],
+    4: [387, 493],
+    5: [494, 649],
+    6: [650, 721],
+    7: [722, 809],
+    8: [810, 905],
+    9: [906, 1025]
+};
+
+// Colori titolo generazione
+const GEN_COLORS = {
+    1: "gen1",
+    2: "gen2",
+    3: "gen3",
+    4: "gen4",
+    5: "gen5",
+    6: "gen6",
+    7: "gen7",
+    8: "gen8",
+    9: "gen9"
+};
+
+let currentGen = 1;
 
 // Cache tipi per evitare richieste duplicate
 const typeCache = {};
@@ -53,10 +79,42 @@ async function getPokemonTypes(id) {
 }
 
 /* ===========================
-   RENDERING
+   GENERAZIONI
 =========================== */
 
-renderAll();
+function selectGen(gen) {
+    currentGen = gen;
+
+    // aggiorna titolo
+    const title = document.getElementById("gen-title");
+    title.textContent = `Generazione ${gen}`;
+
+    // reset classi colore
+    title.className = "";
+    title.classList.add(GEN_COLORS[gen]);
+
+    // aggiorna bottoni menu
+    document.querySelectorAll("#gen-menu button").forEach(btn => btn.classList.remove("active"));
+    document.querySelector(`#gen-menu button:nth-child(${gen})`).classList.add("active");
+
+    renderGeneration();
+}
+
+function renderGeneration() {
+    const container = document.getElementById("list-gen");
+    container.innerHTML = "";
+
+    const [start, end] = GENERATIONS[currentGen];
+    const cards = allCards.filter(c => c.id >= start && c.id <= end);
+
+    cards.forEach(async card => {
+        container.innerHTML += await cardHTML(card);
+    });
+}
+
+/* ===========================
+   RENDERING ORIGINALE (TABS)
+=========================== */
 
 function getOwned() {
     return JSON.parse(localStorage.getItem("ownedCards") || "[]");
@@ -66,91 +124,15 @@ function saveOwned(list) {
     localStorage.setItem("ownedCards", JSON.stringify(list));
 }
 
-function renderAll() {
-    renderHome();
-    renderSelect();
-    renderOwned();
-    renderMissing();
-}
-
-function paginate(list) {
-    const start = (currentPage - 1) * itemsPerPage;
-    return list.slice(start, start + itemsPerPage);
-}
-
-function renderPagination(totalItems, renderFunction, containerId) {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const container = document.getElementById(containerId);
-    container.innerHTML = "";
-
-    if (totalPages <= 1) return;
-
-    for (let i = 1; i <= totalPages; i++) {
-        container.innerHTML += `
-            <button class="page-btn ${i === currentPage ? "active" : ""}" onclick="changePage(${i}, '${renderFunction.name}')">${i}</button>
-        `;
-    }
-}
-
-function changePage(page, fnName) {
-    currentPage = page;
-    window[fnName]();
-}
-
-/* ===========================
-   CARD TEMPLATE
-=========================== */
-
-async function cardHTML(card, selectable = false, owned = false) {
-    const types = await getPokemonTypes(card.id);
-
-    const typeIconsHTML = types
-        .map(t => `<img src="${TYPE_ICONS[t]}" class="type-icon">`)
-        .join("");
-
-    return `
-        <div class="card ${selectable ? "selectable" : ""} ${owned ? "owned" : ""}"
-             ${selectable ? `onclick="toggleOwned(${card.id})"` : ""}>
-
-            <p class="card-name">${card.name}</p>
-            <p class="card-id">#${card.id}</p>
-
-            <img src="${card.img}" alt="${card.name}" class="card-img">
-
-            <div class="type-row">${typeIconsHTML}</div>
-        </div>
-    `;
-}
-
-/* ===========================
-   RENDER SEZIONI
-=========================== */
-
-async function renderHome() {
-    const container = document.getElementById("list-home");
-    container.innerHTML = "";
-
-    const pageItems = paginate(filtered);
-
-    for (const card of pageItems) {
-        container.innerHTML += await cardHTML(card);
-    }
-
-    renderPagination(filtered.length, renderHome, "pagination-home");
-}
-
 async function renderSelect() {
     const container = document.getElementById("list-select");
     container.innerHTML = "";
 
     const owned = getOwned();
-    const pageItems = paginate(filtered);
 
-    for (const card of pageItems) {
+    for (const card of filtered) {
         container.innerHTML += await cardHTML(card, true, owned.includes(card.id));
     }
-
-    renderPagination(filtered.length, renderSelect, "pagination-select");
 }
 
 async function renderOwned() {
@@ -160,13 +142,9 @@ async function renderOwned() {
     const container = document.getElementById("list-owned");
     container.innerHTML = "";
 
-    const pageItems = paginate(ownedCards);
-
-    for (const card of pageItems) {
+    for (const card of ownedCards) {
         container.innerHTML += await cardHTML(card);
     }
-
-    renderPagination(ownedCards.length, renderOwned, "pagination-owned");
 }
 
 async function renderMissing() {
@@ -176,13 +154,9 @@ async function renderMissing() {
     const container = document.getElementById("list-missing");
     container.innerHTML = "";
 
-    const pageItems = paginate(missingCards);
-
-    for (const card of pageItems) {
+    for (const card of missingCards) {
         container.innerHTML += await cardHTML(card);
     }
-
-    renderPagination(missingCards.length, renderMissing, "pagination-missing");
 }
 
 /* ===========================
@@ -192,8 +166,10 @@ async function renderMissing() {
 document.getElementById("search").addEventListener("input", e => {
     const q = e.target.value.toLowerCase();
     filtered = allCards.filter(c => c.name.toLowerCase().includes(q));
-    currentPage = 1;
-    renderAll();
+
+    renderSelect();
+    renderOwned();
+    renderMissing();
 });
 
 /* ===========================
@@ -210,7 +186,10 @@ function toggleOwned(id) {
     }
 
     saveOwned(owned);
-    renderAll();
+
+    renderSelect();
+    renderOwned();
+    renderMissing();
 }
 
 /* ===========================
@@ -227,8 +206,7 @@ function generateQRCode() {
 
     const encoded = btoa(JSON.stringify(data));
 
-    // URL COMPLETO PER IMPORT AUTOMATICO
-   const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca/?sync=${encoded}`;
+    const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca/?sync=${encoded}`;
 
     document.getElementById("qrcode").innerHTML = "";
 
@@ -248,6 +226,7 @@ document.getElementById("qrSyncBtn").addEventListener("click", () => {
 /* IMPORT AUTOMATICO DA URL ?sync= */
 (function () {
     const params = new URLSearchParams(window.location.search);
+
     if (params.has("sync")) {
         try {
             const decoded = JSON.parse(atob(params.get("sync")));
@@ -259,4 +238,14 @@ document.getElementById("qrSyncBtn").addEventListener("click", () => {
             console.error("Errore importazione QR:", e);
         }
     }
+
+    // lettura generazione da URL
+    if (params.has("gen")) {
+        const g = parseInt(params.get("gen"));
+        if (g >= 1 && g <= 9) currentGen = g;
+    }
+
+    // avvia generazione
+    selectGen(currentGen);
+
 })();
