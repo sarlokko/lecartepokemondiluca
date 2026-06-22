@@ -1,7 +1,3 @@
-/* ===========================
-   GENERALE
-=========================== */
-
 body {
     font-family: Arial, sans-serif;
     background-color: #e3f2fd;
@@ -14,10 +10,6 @@ h1 {
     padding: 20px 0;
     margin: 0;
 }
-
-/* ===========================
-   NAVIGAZIONE
-=========================== */
 
 nav {
     display: flex;
@@ -41,10 +33,6 @@ nav button.active {
     background-color: #0d47a1;
 }
 
-/* ===========================
-   RICERCA
-=========================== */
-
 #search {
     width: 80%;
     max-width: 400px;
@@ -56,19 +44,11 @@ nav button.active {
     font-size: 16px;
 }
 
-/* ===========================
-   LISTE
-=========================== */
-
 .list-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
-
-/* ===========================
-   CARD
-=========================== */
 
 .card {
     background: white;
@@ -117,10 +97,6 @@ nav button.active {
     image-rendering: crisp-edges;
 }
 
-/* ===========================
-   SELEZIONABILI
-=========================== */
-
 .selectable {
     cursor: pointer;
 }
@@ -130,14 +106,10 @@ nav button.active {
     background-color: #c8e6c9;
 }
 
-/* ===========================
-   MENU GENERAZIONI
-=========================== */
-
 .gen-menu {
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 10;
     background: #ffffffee;
     padding: 10px;
     display: flex;
@@ -166,30 +138,3 @@ nav button.active {
 .gen-menu button.active {
     background-color: #004ba0;
 }
-
-/* ===========================
-   COLORI PER GENERAZIONE
-=========================== */
-
-.gen1 { color: #ff5252; }
-.gen2 { color: #ff9800; }
-.gen3 { color: #fbc02d; }
-.gen4 { color: #4caf50; }
-.gen5 { color: #2196f3; }
-.gen6 { color: #3f51b5; }
-.gen7 { color: #9c27b0; }
-.gen8 { color: #795548; }
-.gen9 { color: #009688; }
-
-.card {
-    pointer-events: auto !important;
-}
-
-.list-container {
-    pointer-events: auto !important;
-}
-
-body, html {
-    pointer-events: auto !important;
-}
-
