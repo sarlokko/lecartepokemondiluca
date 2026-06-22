@@ -11,9 +11,22 @@
 
 <body>
 
+    <!-- MENU GENERAZIONI STICKY -->
+    <div id="gen-menu" class="gen-menu">
+        <button onclick="selectGen(1)">GEN 1</button>
+        <button onclick="selectGen(2)">GEN 2</button>
+        <button onclick="selectGen(3)">GEN 3</button>
+        <button onclick="selectGen(4)">GEN 4</button>
+        <button onclick="selectGen(5)">GEN 5</button>
+        <button onclick="selectGen(6)">GEN 6</button>
+        <button onclick="selectGen(7)">GEN 7</button>
+        <button onclick="selectGen(8)">GEN 8</button>
+        <button onclick="selectGen(9)">GEN 9</button>
+    </div>
+
     <!-- TITOLO CENTRATO + QR A DESTRA -->
-    <div style="position: relative; padding: 0 20px; margin-top: 10px;">
-        <h1 style="text-align: center; margin: 0;">Le Carte Pokémon di Luca</h1>
+    <div style="position: relative; padding: 0 20px; margin-top: 60px;">
+        <h1 id="gen-title" style="text-align: center; margin: 0;">Le Carte Pokémon di Luca</h1>
 
         <button id="qrSyncBtn" style="
             position: absolute;
@@ -39,7 +52,7 @@
     <!-- RICERCA -->
     <input type="text" id="search" placeholder="Cerca una carta...">
 
-    <!-- NAVIGAZIONE -->
+    <!-- NAVIGAZIONE (NON TOCCATA) -->
     <nav>
         <button onclick="showTab('home')" id="tab-home" class="active">Home</button>
         <button onclick="showTab('select')" id="tab-select">Seleziona</button>
@@ -47,10 +60,9 @@
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
     </nav>
 
-    <!-- TAB HOME -->
+    <!-- TAB HOME (ORA MOSTRERÀ LA GENERAZIONE SELEZIONATA) -->
     <div id="home" class="tab">
-        <div id="list-home" class="list-container"></div>
-        <div id="pagination-home"></div>
+        <div id="list-gen" class="list-container"></div>
     </div>
 
     <!-- TAB SELECT -->
