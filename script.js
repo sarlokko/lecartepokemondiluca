@@ -104,6 +104,19 @@ async function cardHTML(card, selectable = false, owned = false) {
    GENERAZIONI (HOME)
 =========================== */
 
+async function renderGeneration() {
+    const container = document.getElementById("list-gen");
+    container.innerHTML = "";
+
+    const [start, end] = GENERATIONS[currentGen];
+    const cards = allCards.filter(c => c.id >= start && c.id <= end);
+
+    // HOME NON SELEZIONABILE
+    for (const card of cards) {
+        container.innerHTML += await cardHTML(card, false, false);
+    }
+}
+
 function selectGen(gen) {
     currentGen = gen;
 
@@ -115,20 +128,6 @@ function selectGen(gen) {
     document.querySelector(`#gen-menu button:nth-child(${gen})`).classList.add("active");
 
     renderGeneration();
-}
-
-async function renderGeneration() {
-    const container = document.getElementById("list-gen");
-    container.innerHTML = "";
-
-    const [start, end] = GENERATIONS[currentGen];
-    const cards = allCards.filter(c => c.id >= start && c.id <= end);
-
-    const owned = getOwned();
-
-    for (const card of cards) {
-        container.innerHTML += await cardHTML(card, true, owned.includes(card.id));
-    }
 }
 
 /* ===========================
