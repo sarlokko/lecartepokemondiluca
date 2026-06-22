@@ -76,7 +76,7 @@ async function getPokemonTypes(id) {
 }
 
 /* ===========================
-   CARD TEMPLATE (DEVE STARE QUI!)
+   CARD TEMPLATE
 =========================== */
 
 async function cardHTML(card, selectable = false, owned = false) {
@@ -101,7 +101,7 @@ async function cardHTML(card, selectable = false, owned = false) {
 }
 
 /* ===========================
-   GENERAZIONI
+   GENERAZIONI (HOME)
 =========================== */
 
 function selectGen(gen) {
@@ -130,7 +130,7 @@ async function renderGeneration() {
 }
 
 /* ===========================
-   TABS ORIGINALI
+   TABS: SELECT / OWNED / MISSING
 =========================== */
 
 function getOwned() {
@@ -216,47 +216,4 @@ function toggleOwned(id) {
 function generateQRCode() {
     const owned = JSON.parse(localStorage.getItem("ownedCards") || "[]");
 
-    const data = { owned, timestamp: Date.now() };
-    const encoded = btoa(JSON.stringify(data));
-
-    const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca/?sync=${encoded}`;
-
-    document.getElementById("qrcode").innerHTML = "";
-
-    new QRCode(document.getElementById("qrcode"), {
-        text: syncUrl,
-        width: 200,
-        height: 200
-    });
-}
-
-document.getElementById("qrSyncBtn").addEventListener("click", () => {
-    const box = document.getElementById("qrContainer");
-    box.style.display = box.style.display === "none" ? "block" : "none";
-    generateQRCode();
-});
-
-/* ===========================
-   INIT
-=========================== */
-
-(function () {
-    const params = new URLSearchParams(window.location.search);
-
-    if (params.has("sync")) {
-        try {
-            const decoded = JSON.parse(atob(params.get("sync")));
-            if (decoded.owned) {
-                localStorage.setItem("ownedCards", JSON.stringify(decoded.owned));
-                alert("Sincronizzazione completata!");
-            }
-        } catch {}
-    }
-
-    if (params.has("gen")) {
-        const g = parseInt(params.get("gen"));
-        if (g >= 1 && g <= 9) currentGen = g;
-    }
-
-    selectGen(currentGen);
-})();
+    const data = { owned
