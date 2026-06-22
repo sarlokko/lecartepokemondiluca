@@ -23,28 +23,7 @@
         <button onclick="selectGen(9)">GEN 9</button>
     </div>
 
-    <div style="position: relative; padding: 0 20px; margin-top: 60px;">
-        <h1 id="gen-title" style="text-align: center; margin: 0;">Le Carte Pokémon di Luca</h1>
-
-        <button id="qrSyncBtn" style="
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 8px 14px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        ">Aggiorna 🔄</button>
-    </div>
-
-    <div id="qrContainer" style="display:none; margin-top: 15px; text-align:center;">
-        <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
-        <div id="qrcode"></div>
-    </div>
+    <h1 id="gen-title">Le Carte Pokémon di Luca</h1>
 
     <input type="text" id="search" placeholder="Cerca una carta...">
 
@@ -72,21 +51,5 @@
     </div>
 
     <script src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <script>
-        function showTab(tab) {
-            document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
-            document.getElementById(tab).style.display = "block";
-
-            document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-            document.getElementById("tab-" + tab).classList.add("active");
-
-            if (tab === "select") renderSelect();
-            if (tab === "owned") renderOwned();
-            if (tab === "missing") renderMissing();
-        }
-    </script>
-
 </body>
 </html>
