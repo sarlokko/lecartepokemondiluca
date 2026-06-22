@@ -52,7 +52,7 @@
     <!-- RICERCA -->
     <input type="text" id="search" placeholder="Cerca una carta...">
 
-    <!-- NAVIGAZIONE (NON TOCCATA) -->
+    <!-- NAVIGAZIONE -->
     <nav>
         <button onclick="showTab('home')" id="tab-home" class="active">Home</button>
         <button onclick="showTab('select')" id="tab-select">Seleziona</button>
@@ -60,7 +60,7 @@
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
     </nav>
 
-    <!-- TAB HOME (ORA MOSTRERÀ LA GENERAZIONE SELEZIONATA) -->
+    <!-- TAB HOME -->
     <div id="home" class="tab">
         <div id="list-gen" class="list-container"></div>
     </div>
@@ -68,19 +68,16 @@
     <!-- TAB SELECT -->
     <div id="select" class="tab" style="display:none;">
         <div id="list-select" class="list-container"></div>
-        <div id="pagination-select"></div>
     </div>
 
     <!-- TAB OWNED -->
     <div id="owned" class="tab" style="display:none;">
         <div id="list-owned" class="list-container"></div>
-        <div id="pagination-owned"></div>
     </div>
 
     <!-- TAB MISSING -->
     <div id="missing" class="tab" style="display:none;">
         <div id="list-missing" class="list-container"></div>
-        <div id="pagination-missing"></div>
     </div>
 
     <!-- SCRIPT PRINCIPALE -->
@@ -97,6 +94,11 @@
 
             document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
             document.getElementById("tab-" + tab).classList.add("active");
+
+            // RENDER SPECIFICO PER OGNI TAB
+            if (tab === "select") renderSelect();
+            if (tab === "owned") renderOwned();
+            if (tab === "missing") renderMissing();
         }
     </script>
 
