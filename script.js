@@ -88,7 +88,7 @@ async function cardHTML(card, selectable = false, owned = false) {
 
     return `
         <div class="card ${selectable ? "selectable" : ""} ${owned ? "owned" : ""}"
-             ${selectable ? `onclick="toggleOwned(${card.id})"` : ""}>
+             data-id="${card.id}">
 
             <p class="card-name">${card.name}</p>
             <p class="card-id">#${card.id}</p>
@@ -101,6 +101,18 @@ async function cardHTML(card, selectable = false, owned = false) {
 }
 
 /* ===========================
+   CLICK HANDLER (NUOVO)
+=========================== */
+
+document.addEventListener("click", e => {
+    const card = e.target.closest(".card.selectable");
+    if (!card) return;
+
+    const id = parseInt(card.getAttribute("data-id"), 10);
+    if (!isNaN(id)) toggleOwned(id);
+});
+
+/* ===========================
    GENERAZIONI (HOME)
 =========================== */
 
@@ -111,7 +123,6 @@ async function renderGeneration() {
     const [start, end] = GENERATIONS[currentGen];
     const cards = allCards.filter(c => c.id >= start && c.id <= end);
 
-    // HOME NON SELEZIONABILE
     for (const card of cards) {
         container.innerHTML += await cardHTML(card, false, false);
     }
@@ -131,7 +142,7 @@ function selectGen(gen) {
 }
 
 /* ===========================
-   TABS: SELECT / OWNED / MISSING
+   TABS
 =========================== */
 
 function getOwned() {
@@ -147,8 +158,6 @@ async function renderSelect() {
     container.innerHTML = "";
 
     const owned = getOwned();
-
-    // FIX: se filtered è vuoto → usa allCards
     const list = filtered.length > 0 ? filtered : allCards;
 
     for (const card of list) {
