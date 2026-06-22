@@ -11,22 +11,35 @@
 
 <body>
 
-    <div id="gen-menu" class="gen-menu">
-        <button onclick="selectGen(1)">GEN 1</button>
-        <button onclick="selectGen(2)">GEN 2</button>
-        <button onclick="selectGen(3)">GEN 3</button>
-        <button onclick="selectGen(4)">GEN 4</button>
-        <button onclick="selectGen(5)">GEN 5</button>
-        <button onclick="selectGen(6)">GEN 6</button>
-        <button onclick="selectGen(7)">GEN 7</button>
-        <button onclick="selectGen(8)">GEN 8</button>
-        <button onclick="selectGen(9)">GEN 9</button>
+    <!-- TITOLO CENTRATO + QR A DESTRA -->
+    <div style="position: relative; padding: 0 20px; margin-top: 10px;">
+        <h1 style="text-align: center; margin: 0;">Le Carte Pokémon di Luca</h1>
+
+        <button id="qrSyncBtn" style="
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        ">Aggiorna 🔄</button>
     </div>
 
-    <h1 id="gen-title">Le Carte Pokémon di Luca</h1>
+    <!-- QR CODE -->
+    <div id="qrContainer" style="display:none; margin-top: 15px; text-align:center;">
+        <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
+        <div id="qrcode"></div>
+    </div>
 
+    <!-- RICERCA -->
     <input type="text" id="search" placeholder="Cerca una carta...">
 
+    <!-- NAVIGAZIONE -->
     <nav>
         <button onclick="showTab('home')" id="tab-home" class="active">Home</button>
         <button onclick="showTab('select')" id="tab-select">Seleziona</button>
@@ -34,22 +47,46 @@
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
     </nav>
 
+    <!-- TAB HOME -->
     <div id="home" class="tab">
-        <div id="list-gen" class="list-container"></div>
+        <div id="list-home" class="list-container"></div>
+        <div id="pagination-home"></div>
     </div>
 
+    <!-- TAB SELECT -->
     <div id="select" class="tab" style="display:none;">
         <div id="list-select" class="list-container"></div>
+        <div id="pagination-select"></div>
     </div>
 
+    <!-- TAB OWNED -->
     <div id="owned" class="tab" style="display:none;">
         <div id="list-owned" class="list-container"></div>
+        <div id="pagination-owned"></div>
     </div>
 
+    <!-- TAB MISSING -->
     <div id="missing" class="tab" style="display:none;">
         <div id="list-missing" class="list-container"></div>
+        <div id="pagination-missing"></div>
     </div>
 
+    <!-- SCRIPT PRINCIPALE -->
     <script src="script.js"></script>
+
+    <!-- LIBRERIA QR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- FUNZIONE CAMBIO TAB -->
+    <script>
+        function showTab(tab) {
+            document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
+            document.getElementById(tab).style.display = "block";
+
+            document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+            document.getElementById("tab-" + tab).classList.add("active");
+        }
+    </script>
+
 </body>
 </html>
