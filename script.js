@@ -1,65 +1,62 @@
+/* ===========================
+   CONFIG
+=========================== */
+
 let allCards = POKEMON_LIST;
 let filtered = allCards;
+let currentPage = 1;
+const itemsPerPage = 50;
 
-const GENERATIONS = {
-    1: [1, 151],
-    2: [152, 251],
-    3: [252, 386],
-    4: [387, 493],
-    5: [494, 649],
-    6: [650, 721],
-    7: [722, 809],
-    8: [810, 905],
-    9: [906, 1025]
+// Cache tipi per evitare richieste duplicate
+const typeCache = {};
+
+// Icone ufficiali Pokémon HOME
+const TYPE_ICONS = {
+    normal: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/normal.png",
+    fire: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/fire.png",
+    water: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/water.png",
+    grass: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/grass.png",
+    electric: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/electric.png",
+    ice: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/ice.png",
+    fighting: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/fighting.png",
+    poison: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/poison.png",
+    ground: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/ground.png",
+    flying: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/flying.png",
+    psychic: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/psychic.png",
+    bug: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/bug.png",
+    rock: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/rock.png",
+    ghost: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/ghost.png",
+    dragon: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/dragon.png",
+    dark: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/dark.png",
+    steel: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/steel.png",
+    fairy: "https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/fairy.png"
 };
 
-let currentGen = 1;
+/* ===========================
+   FETCH TIPI AUTOMATICO
+=========================== */
 
 async function getPokemonTypes(id) {
+    if (typeCache[id]) return typeCache[id];
+
     try {
         const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
         const data = await res.json();
-        return data.types.map(t => t.type.name);
-    } catch {
+        const types = data.types.map(t => t.type.name);
+
+        typeCache[id] = types;
+        return types;
+    } catch (e) {
+        console.error("Errore tipi Pokémon:", e);
         return [];
     }
 }
 
-async function cardHTML(card, selectable = false, owned = false) {
-    const types = await getPokemonTypes(card.id);
+/* ===========================
+   RENDERING
+=========================== */
 
-    const typeIconsHTML = types
-        .map(t => `<img src="https://raw.githubusercontent.com/msikma/pokesprite/master/misc/types/gen8/${t}.png" class="type-icon">`)
-        .join("");
-
-    return `
-        <div class="card ${selectable ? "selectable" : ""} ${owned ? "owned" : ""}"
-             onclick="${selectable ? `toggleOwned(${card.id})` : ""}">
-            <p class="card-name">${card.name}</p>
-            <p class="card-id">#${card.id}</p>
-            <img src="${card.img}" class="card-img">
-            <div class="type-row">${typeIconsHTML}</div>
-        </div>
-    `;
-}
-
-async function renderGeneration() {
-    const container = document.getElementById("list-gen");
-    container.innerHTML = "";
-
-    const [start, end] = GENERATIONS[currentGen];
-    const cards = allCards.filter(c => c.id >= start && c.id <= end);
-
-    for (const card of cards) {
-        container.innerHTML += await cardHTML(card);
-    }
-}
-
-function selectGen(gen) {
-    currentGen = gen;
-    document.getElementById("gen-title").textContent = `Generazione ${gen}`;
-    renderGeneration();
-}
+renderAll();
 
 function getOwned() {
     return JSON.parse(localStorage.getItem("ownedCards") || "[]");
@@ -69,47 +66,139 @@ function saveOwned(list) {
     localStorage.setItem("ownedCards", JSON.stringify(list));
 }
 
+function renderAll() {
+    renderHome();
+    renderSelect();
+    renderOwned();
+    renderMissing();
+}
+
+function paginate(list) {
+    const start = (currentPage - 1) * itemsPerPage;
+    return list.slice(start, start + itemsPerPage);
+}
+
+function renderPagination(totalItems, renderFunction, containerId) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+
+    if (totalPages <= 1) return;
+
+    for (let i = 1; i <= totalPages; i++) {
+        container.innerHTML += `
+            <button class="page-btn ${i === currentPage ? "active" : ""}" onclick="changePage(${i}, '${renderFunction.name}')">${i}</button>
+        `;
+    }
+}
+
+function changePage(page, fnName) {
+    currentPage = page;
+    window[fnName]();
+}
+
+/* ===========================
+   CARD TEMPLATE
+=========================== */
+
+async function cardHTML(card, selectable = false, owned = false) {
+    const types = await getPokemonTypes(card.id);
+
+    const typeIconsHTML = types
+        .map(t => `<img src="${TYPE_ICONS[t]}" class="type-icon">`)
+        .join("");
+
+    return `
+        <div class="card ${selectable ? "selectable" : ""} ${owned ? "owned" : ""}"
+             ${selectable ? `onclick="toggleOwned(${card.id})"` : ""}>
+
+            <p class="card-name">${card.name}</p>
+            <p class="card-id">#${card.id}</p>
+
+            <img src="${card.img}" alt="${card.name}" class="card-img">
+
+            <div class="type-row">${typeIconsHTML}</div>
+        </div>
+    `;
+}
+
+/* ===========================
+   RENDER SEZIONI
+=========================== */
+
+async function renderHome() {
+    const container = document.getElementById("list-home");
+    container.innerHTML = "";
+
+    const pageItems = paginate(filtered);
+
+    for (const card of pageItems) {
+        container.innerHTML += await cardHTML(card);
+    }
+
+    renderPagination(filtered.length, renderHome, "pagination-home");
+}
+
 async function renderSelect() {
     const container = document.getElementById("list-select");
     container.innerHTML = "";
 
     const owned = getOwned();
-    const list = filtered.length > 0 ? filtered : allCards;
+    const pageItems = paginate(filtered);
 
-    for (const card of list) {
+    for (const card of pageItems) {
         container.innerHTML += await cardHTML(card, true, owned.includes(card.id));
     }
+
+    renderPagination(filtered.length, renderSelect, "pagination-select");
 }
 
 async function renderOwned() {
     const owned = getOwned();
-    const cards = allCards.filter(c => owned.includes(c.id));
+    const ownedCards = allCards.filter(c => owned.includes(c.id));
 
     const container = document.getElementById("list-owned");
     container.innerHTML = "";
 
-    for (const card of cards) {
+    const pageItems = paginate(ownedCards);
+
+    for (const card of pageItems) {
         container.innerHTML += await cardHTML(card);
     }
+
+    renderPagination(ownedCards.length, renderOwned, "pagination-owned");
 }
 
 async function renderMissing() {
     const owned = getOwned();
-    const cards = allCards.filter(c => !owned.includes(c.id));
+    const missingCards = allCards.filter(c => !owned.includes(c.id));
 
     const container = document.getElementById("list-missing");
     container.innerHTML = "";
 
-    for (const card of cards) {
+    const pageItems = paginate(missingCards);
+
+    for (const card of pageItems) {
         container.innerHTML += await cardHTML(card);
     }
+
+    renderPagination(missingCards.length, renderMissing, "pagination-missing");
 }
+
+/* ===========================
+   SEARCH
+=========================== */
 
 document.getElementById("search").addEventListener("input", e => {
     const q = e.target.value.toLowerCase();
     filtered = allCards.filter(c => c.name.toLowerCase().includes(q));
-    renderSelect();
+    currentPage = 1;
+    renderAll();
 });
+
+/* ===========================
+   TOGGLE OWNED
+=========================== */
 
 function toggleOwned(id) {
     let owned = getOwned();
@@ -121,11 +210,53 @@ function toggleOwned(id) {
     }
 
     saveOwned(owned);
-    renderSelect();
-    renderOwned();
-    renderMissing();
+    renderAll();
 }
 
+/* ===========================
+   QR CODE SYNC
+=========================== */
+
+function generateQRCode() {
+    const owned = JSON.parse(localStorage.getItem("ownedCards") || "[]");
+
+    const data = {
+        owned: owned,
+        timestamp: Date.now()
+    };
+
+    const encoded = btoa(JSON.stringify(data));
+
+    // URL COMPLETO PER IMPORT AUTOMATICO
+   const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca/?sync=${encoded}`;
+
+    document.getElementById("qrcode").innerHTML = "";
+
+    new QRCode(document.getElementById("qrcode"), {
+        text: syncUrl,
+        width: 200,
+        height: 200
+    });
+}
+
+document.getElementById("qrSyncBtn").addEventListener("click", () => {
+    const box = document.getElementById("qrContainer");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+    generateQRCode();
+});
+
+/* IMPORT AUTOMATICO DA URL ?sync= */
 (function () {
-    selectGen(1);
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("sync")) {
+        try {
+            const decoded = JSON.parse(atob(params.get("sync")));
+            if (decoded.owned) {
+                localStorage.setItem("ownedCards", JSON.stringify(decoded.owned));
+                alert("Sincronizzazione completata!");
+            }
+        } catch (e) {
+            console.error("Errore importazione QR:", e);
+        }
+    }
 })();
