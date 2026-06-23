@@ -4,8 +4,24 @@
 
 let allCards = POKEMON_LIST;
 let filtered = allCards;
-let currentPage = 1;
-const itemsPerPage = 50;
+let currentGen = 1;
+
+// Range Pokédex nazionale per generazione
+const GENERATIONS = [
+    { gen: 1, name: "Gen I",    min: 1,    max: 151 },
+    { gen: 2, name: "Gen II",   min: 152,  max: 251 },
+    { gen: 3, name: "Gen III",  min: 252,  max: 386 },
+    { gen: 4, name: "Gen IV",   min: 387,  max: 493 },
+    { gen: 5, name: "Gen V",    min: 494,  max: 649 },
+    { gen: 6, name: "Gen VI",   min: 650,  max: 721 },
+    { gen: 7, name: "Gen VII",  min: 722,  max: 809 },
+    { gen: 8, name: "Gen VIII", min: 810,  max: 905 },
+    { gen: 9, name: "Gen IX",   min: 906,  max: 1025 }
+];
+
+function getGenRange(gen) {
+    return GENERATIONS.find(g => g.gen === gen) || GENERATIONS[0];
+}
 
 // Cache tipi per evitare richieste duplicate
 const typeCache = {};
@@ -74,26 +90,23 @@ function renderAll() {
 }
 
 function paginate(list) {
-    const start = (currentPage - 1) * itemsPerPage;
-    return list.slice(start, start + itemsPerPage);
+    const range = getGenRange(currentGen);
+    return list.filter(c => c.id >= range.min && c.id <= range.max);
 }
 
 function renderPagination(totalItems, renderFunction, containerId) {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
     const container = document.getElementById(containerId);
     container.innerHTML = "";
 
-    if (totalPages <= 1) return;
-
-    for (let i = 1; i <= totalPages; i++) {
+    GENERATIONS.forEach(g => {
         container.innerHTML += `
-            <button class="page-btn ${i === currentPage ? "active" : ""}" onclick="changePage(${i}, '${renderFunction.name}')">${i}</button>
+            <button class="page-btn ${g.gen === currentGen ? "active" : ""}" onclick="changeGen(${g.gen}, '${renderFunction.name}')">${g.name}</button>
         `;
-    }
+    });
 }
 
-function changePage(page, fnName) {
-    currentPage = page;
+function changeGen(gen, fnName) {
+    currentGen = gen;
     window[fnName]();
 }
 
@@ -192,7 +205,7 @@ async function renderMissing() {
 document.getElementById("search").addEventListener("input", e => {
     const q = e.target.value.toLowerCase();
     filtered = allCards.filter(c => c.name.toLowerCase().includes(q));
-    currentPage = 1;
+    currentGen = 1;
     renderAll();
 });
 
