@@ -228,15 +228,18 @@ function generateQRCode() {
     const encoded = btoa(JSON.stringify(data));
 
     // URL COMPLETO PER IMPORT AUTOMATICO
-   const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca/?sync=${encoded}`;
+    const syncUrl = `https://sarlokko.github.io/lecartepokemondiluca/?sync=${encoded}`;
 
-    document.getElementById("qrcode").innerHTML = "";
+    const qrContainer = document.getElementById("qrcode");
+    qrContainer.innerHTML = "";
 
-    new QRCode(document.getElementById("qrcode"), {
-        text: syncUrl,
-        width: 200,
-        height: 200
-    });
+    // typeNumber 0 = la libreria scala automaticamente la dimensione del QR
+    // in base a quanti dati deve contenere (anche centinaia di carte)
+    const qr = qrcode(0, "L");
+    qr.addData(syncUrl);
+    qr.make();
+
+    qrContainer.innerHTML = qr.createImgTag(4); // 4 = dimensione pixel per modulo
 }
 
 document.getElementById("qrSyncBtn").addEventListener("click", () => {
