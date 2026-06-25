@@ -1,65 +1,100 @@
 /* ===========================
-   GENERALE
+   GENERALE — TEMA POKÉMON
 =========================== */
-
 body {
     font-family: Arial, sans-serif;
-    background-color: #e3f2fd;
     margin: 0;
     padding: 0;
+    /* Sfondo a gradiente blu/giallo con motivo a pallini (effetto Pokéball leggero) */
+    background-color: #fff3cd;
+    background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,203,5,0.25) 0, rgba(255,203,5,0.25) 8px, transparent 9px),
+        radial-gradient(circle at 70% 60%, rgba(58,93,174,0.18) 0, rgba(58,93,174,0.18) 10px, transparent 11px),
+        radial-gradient(circle at 40% 85%, rgba(204,0,0,0.15) 0, rgba(204,0,0,0.15) 7px, transparent 8px),
+        linear-gradient(180deg, #fff8e1 0%, #fffdf5 100%);
+    background-size: 140px 140px, 180px 180px, 160px 160px, 100% 100%;
+    background-attachment: fixed;
 }
 
 h1 {
     text-align: center;
-    padding: 20px 0;
+    padding: 22px 0 14px 0;
     margin: 0;
+    font-family: "Press Start 2P", "Arial", sans-serif;
+    font-size: 26px;
+    color: #ffcb05; /* giallo Pikachu */
+    -webkit-text-stroke: 2px #2a75bb; /* contorno blu Pokémon */
+    text-shadow:
+        3px 3px 0 #2a75bb,
+        -1px -1px 0 #2a75bb,
+        1px -1px 0 #2a75bb,
+        -1px 1px 0 #2a75bb;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 16px;
+        padding: 16px 0 10px 0;
+    }
 }
 
 /* ===========================
    NAVIGAZIONE
 =========================== */
-
 nav {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 10px;
-    background-color: #90caf9;
-    padding: 10px;
+    background: linear-gradient(180deg, #cc0000 0%, #a10000 100%);
+    padding: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
 }
-
 nav button {
-    padding: 10px 15px;
+    padding: 10px 16px;
     border: none;
-    background-color: #1976d2;
-    color: white;
-    border-radius: 6px;
+    background-color: #ffcb05;
+    color: #2a2a2a;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 15px;
+    font-weight: bold;
+    transition: transform 0.15s ease, background-color 0.15s ease;
 }
-
+nav button:hover {
+    transform: translateY(-2px);
+    background-color: #ffe066;
+}
 nav button.active {
-    background-color: #0d47a1;
+    background-color: #2a75bb;
+    color: white;
 }
 
 /* ===========================
    RICERCA
 =========================== */
-
 #search {
     width: 80%;
     max-width: 400px;
-    padding: 10px;
-    margin: 15px auto;
+    padding: 10px 14px;
+    margin: 18px auto;
     display: block;
-    border: 2px solid #90caf9;
-    border-radius: 6px;
+    border: 2px solid #2a75bb;
+    border-radius: 20px;
     font-size: 16px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+#search:focus {
+    outline: none;
+    border-color: #ffcb05;
+    box-shadow: 0 0 0 3px rgba(255,203,5,0.4);
 }
 
 /* ===========================
    LISTE
 =========================== */
-
 .list-container {
     display: flex;
     flex-wrap: wrap;
@@ -69,43 +104,40 @@ nav button.active {
 /* ===========================
    CARD
 =========================== */
-
 .card {
     background: white;
-    border: 2px solid #90caf9;
-    border-radius: 12px;
+    border: 3px solid #2a75bb;
+    border-radius: 14px;
     padding: 12px;
     text-align: center;
     width: 150px;
     margin: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: transform 0.15s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-
 .card:hover {
-    transform: scale(1.05);
+    transform: scale(1.06) rotate(-1deg);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    border-color: #ffcb05;
 }
-
 /* Nome Pokémon */
 .card-name {
     font-weight: bold;
     font-size: 18px;
     margin: 0;
+    color: #2a2a2a;
 }
-
 /* Numero Pokémon */
 .card-id {
     font-size: 14px;
-    color: #555;
+    color: #888;
     margin: 4px 0 10px 0;
 }
-
 /* Immagine Pokémon */
 .card-img {
     width: 100%;
     border-radius: 8px;
 }
-
 /* Tipi Pokémon */
 .type-row {
     margin-top: 10px;
@@ -113,7 +145,6 @@ nav button.active {
     justify-content: center;
     gap: 8px;
 }
-
 .type-icon {
     width: 40px;
     height: 40px;
@@ -124,30 +155,34 @@ nav button.active {
 /* ===========================
    SELEZIONABILI
 =========================== */
-
 .selectable {
     cursor: pointer;
 }
-
 .selectable.owned {
     border-color: #2e7d32;
-    background-color: #c8e6c9;
+    background-color: #e8f5e9;
+    box-shadow: 0 0 0 3px rgba(46,125,50,0.25);
 }
 
 /* ===========================
    PAGINAZIONE
 =========================== */
-
 .page-btn {
-    padding: 6px 10px;
+    padding: 7px 12px;
     margin: 3px;
     border: none;
-    background-color: #64b5f6;
+    background-color: #2a75bb;
     color: white;
-    border-radius: 5px;
+    border-radius: 16px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.15s ease;
 }
-
+.page-btn:hover {
+    background-color: #3d8fd6;
+}
 .page-btn.active {
-    background-color: #0d47a1;
+    background-color: #ffcb05;
+    color: #2a2a2a;
+    font-weight: bold;
 }
