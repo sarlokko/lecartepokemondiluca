@@ -7,21 +7,10 @@ let battler1 = null;
 let battler2 = null;
 
 function pickRandomBattlers() {
-  const owned = getOwned(); // funzione già presente in script.js
-  if (owned.length < 2) {
-    document.getElementById("battlePreview").innerHTML =
-      "<p>Devi possedere almeno 2 carte per lottare!</p>";
-    document.getElementById("winnerChoice").style.display = "none";
-    document.getElementById("battleResult").innerHTML = "";
-    return;
-  }
-
-  const shuffled = owned.slice().sort(() => Math.random() - 0.5);
-  const id1 = shuffled[0];
-  const id2 = shuffled[1];
-
-  battler1 = allCards.find(p => p.id === id1);
-  battler2 = allCards.find(p => p.id === id2);
+  // Sceglie 2 Pokémon a caso fra TUTTI quelli del Pokédex
+  const shuffled = allCards.slice().sort(() => Math.random() - 0.5);
+  battler1 = shuffled[0];
+  battler2 = shuffled[1];
 
   renderBattlePreview();
   populateWinnerSelect();
