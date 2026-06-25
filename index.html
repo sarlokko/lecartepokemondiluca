@@ -42,6 +42,7 @@
         <button onclick="showTab('owned')" id="tab-owned">Possedute</button>
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
         <button onclick="showTab('battle')" id="tab-battle">Lotte</button>
+        <button onclick="showTab('megagmax')" id="tab-megagmax">Mega/Gigamax</button>
     </nav>
     <!-- TAB HOME -->
     <div id="home" class="tab">
@@ -97,10 +98,17 @@
         <div id="battleResult" style="margin-top:25px;"></div>
     </div>
 
+    <!-- TAB MEGA/GIGAMAX -->
+    <div id="megagmax" class="tab" style="display:none;">
+        <div id="list-megagmax" class="list-container"></div>
+    </div>
+
     <!-- SCRIPT PRINCIPALE -->
     <script src="script.js"></script>
     <!-- SCRIPT LOTTE (deve stare DOPO script.js) -->
     <script src="battle.js"></script>
+    <!-- SCRIPT MEGA/GIGAMAX -->
+    <script src="megagmax.js"></script>
     <!-- LIBRERIA QR (versione che scala automaticamente con i dati) -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
     <!-- FUNZIONE CAMBIO TAB -->
@@ -110,6 +118,11 @@
             document.getElementById(tab).style.display = "block";
             document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
             document.getElementById("tab-" + tab).classList.add("active");
+
+            if (tab === "megagmax" && !window.__megagmaxLoaded) {
+                window.__megagmaxLoaded = true;
+                renderMegaGmax();
+            }
         }
     </script>
 </body>
