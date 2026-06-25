@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Carte Pokémon di Luca</title>
-
     <link rel="stylesheet" href="style.css">
     <script src="pokemon-list.js"></script>
 </head>
-
 <body>
-
     <!-- TITOLO CENTRATO + QR A DESTRA -->
     <div style="position: relative; padding: 0 20px; margin-top: 10px;">
         <h1 style="text-align: center; margin: 0;">Le Carte Pokémon di Luca</h1>
-
         <button id="qrSyncBtn" style="
             position: absolute;
             right: 20px;
@@ -29,16 +25,13 @@
             font-size: 14px;
         ">Aggiorna 🔄</button>
     </div>
-
     <!-- QR CODE -->
     <div id="qrContainer" style="display:none; margin-top: 15px; text-align:center;">
         <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
         <div id="qrcode"></div>
     </div>
-
     <!-- RICERCA -->
     <input type="text" id="search" placeholder="Cerca una carta...">
-
     <!-- NAVIGAZIONE -->
     <nav>
         <button onclick="showTab('home')" id="tab-home" class="active">Home</button>
@@ -47,47 +40,74 @@
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
         <button onclick="showTab('battle')" id="tab-battle">Lotte</button>
     </nav>
-
     <!-- TAB HOME -->
     <div id="home" class="tab">
         <div id="list-home" class="list-container"></div>
         <div id="pagination-home"></div>
     </div>
-
     <!-- TAB SELECT -->
     <div id="select" class="tab" style="display:none;">
         <div id="list-select" class="list-container"></div>
         <div id="pagination-select"></div>
     </div>
-
     <!-- TAB OWNED -->
     <div id="owned" class="tab" style="display:none;">
         <div id="list-owned" class="list-container"></div>
         <div id="pagination-owned"></div>
     </div>
-
     <!-- TAB MISSING -->
     <div id="missing" class="tab" style="display:none;">
         <div id="list-missing" class="list-container"></div>
         <div id="pagination-missing"></div>
     </div>
+    <!-- TAB BATTLE (LOTTE) -->
+    <div id="battle" class="tab" style="display:none;">
+        <div style="text-align:center; margin-top:20px;">
+            <button id="pickBtn" onclick="pickRandomBattlers()" style="
+                padding:10px 18px;
+                font-size:16px;
+                background:#28a745;
+                color:#fff;
+                border:none;
+                border-radius:6px;
+                cursor:pointer;
+            ">🎲 Scegli 2 Pokémon a caso</button>
+        </div>
+
+        <div id="battlePreview" style="display:flex; justify-content:center; gap:40px; margin-top:20px; flex-wrap:wrap;"></div>
+
+        <div id="winnerChoice" style="display:none; text-align:center; margin-top:20px;">
+            <p><strong>Chi vincerà?</strong></p>
+            <select id="winnerSelect" style="font-size:16px; padding:6px;"></select>
+            <br><br>
+            <button onclick="runBattle()" style="
+                padding:10px 18px;
+                font-size:16px;
+                background:#dc3545;
+                color:#fff;
+                border:none;
+                border-radius:6px;
+                cursor:pointer;
+            ">⚔️ Lotta!</button>
+        </div>
+
+        <div id="battleResult" style="margin-top:25px;"></div>
+    </div>
 
     <!-- SCRIPT PRINCIPALE -->
     <script src="script.js"></script>
-
+    <!-- SCRIPT LOTTE (deve stare DOPO script.js) -->
+    <script src="battle.js"></script>
     <!-- LIBRERIA QR (versione che scala automaticamente con i dati) -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
-
     <!-- FUNZIONE CAMBIO TAB -->
     <script>
         function showTab(tab) {
             document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
             document.getElementById(tab).style.display = "block";
-
             document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
             document.getElementById("tab-" + tab).classList.add("active");
         }
     </script>
-
 </body>
 </html>
