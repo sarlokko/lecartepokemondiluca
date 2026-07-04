@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- QR prima di tutto il resto così è disponibile -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
     <script src="pokemon-list.js"></script>
 </head>
 <body>
@@ -77,9 +79,7 @@
                 cursor:pointer;
             ">🎲 Scegli 2 Pokémon a caso</button>
         </div>
-
         <div id="battlePreview" style="display:flex; justify-content:center; gap:40px; margin-top:20px; flex-wrap:wrap;"></div>
-
         <div id="winnerChoice" style="display:none; text-align:center; margin-top:20px;">
             <p><strong>Chi vincerà?</strong></p>
             <select id="winnerSelect" style="font-size:16px; padding:6px;"></select>
@@ -94,23 +94,18 @@
                 cursor:pointer;
             ">⚔️ Lotta!</button>
         </div>
-
         <div id="battleResult" style="margin-top:25px;"></div>
     </div>
-
     <!-- TAB MEGA/GIGAMAX -->
     <div id="megagmax" class="tab" style="display:none;">
         <div id="list-megagmax" class="list-container"></div>
     </div>
 
-    <!-- SCRIPT PRINCIPALE -->
+    <!-- SCRIPT: ordine importante -->
     <script src="script.js"></script>
-    <!-- SCRIPT LOTTE (deve stare DOPO script.js) -->
     <script src="battle.js"></script>
-    <!-- SCRIPT MEGA/GIGAMAX -->
     <script src="megagmax.js"></script>
-    <!-- LIBRERIA QR (versione che scala automaticamente con i dati) -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+
     <!-- FUNZIONE CAMBIO TAB -->
     <script>
         function showTab(tab) {
