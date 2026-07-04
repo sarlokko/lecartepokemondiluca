@@ -45,7 +45,7 @@
         <button onclick="showTab('owned')" id="tab-owned">Possedute</button>
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
         <button onclick="showTab('battle')" id="tab-battle">Lotte</button>
-        <button onclick="showTab('megagmax')" id="tab-megagmax">Mega/Gigamax</button>
+        <button onclick="showTab('megamax')" id="tab-megamax">Mega/Gigamax</button>
     </nav>
     <!-- TAB HOME -->
     <div id="home" class="tab">
@@ -98,14 +98,14 @@
         <div id="battleResult" style="margin-top:25px;"></div>
     </div>
     <!-- TAB MEGA/GIGAMAX -->
-    <div id="megagmax" class="tab" style="display:none;">
+    <div id="megamax" class="tab" style="display:none;">
         <div id="list-megagmax" class="list-container"></div>
     </div>
 
     <!-- SCRIPT: ordine importante -->
     <script src="script.js"></script>
     <script src="battle.js"></script>
-    <script src="megagmax.js"></script>
+    <script src="megamax.js"></script>
 
     <!-- FUNZIONE CAMBIO TAB -->
     <script>
@@ -115,8 +115,8 @@
             document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
             document.getElementById("tab-" + tab).classList.add("active");
 
-            if (tab === "megagmax" && !window.__megagmaxLoaded) {
-                window.__megagmaxLoaded = true;
+            if (tab === "megamax" && !window.__megamaxLoaded) {
+                window.__megamaxLoaded = true;
                 renderMegaGmax();
             }
         }
