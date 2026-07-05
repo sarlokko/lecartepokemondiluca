@@ -8,8 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <!-- QR prima di tutto il resto così è disponibile -->
-    <!-- deploy: 2026-07-04b -->
+    <!-- QR library caricata prima di tutto -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
     <script src="pokemon-list.js"></script>
 </head>
@@ -107,8 +106,9 @@
     <script src="battle.js"></script>
     <script src="megamax.js"></script>
 
-    <!-- FUNZIONE CAMBIO TAB -->
+    <!-- LOGICA TAB + QR (sovrascrive quello di script.js per il QR) -->
     <script>
+        // Cambio tab
         function showTab(tab) {
             document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
             document.getElementById(tab).style.display = "block";
@@ -120,6 +120,45 @@
                 renderMegaGmax();
             }
         }
+
+        // QR — gestito qui direttamente, indipendente da script.js
+        function generateQRCode() {
+            try {
+                const owned = JSON.parse(localStorage.getItem("ownedCards") || "[]");
+                const data = { owned: owned, timestamp: Date.now() };
+                const encoded = btoa(JSON.stringify(data));
+                const syncUrl = "https://sarlokko.github.io/lecartepokemondiluca/?sync=" + encoded;
+
+                const container = document.getElementById("qrcode");
+                container.innerHTML = "";
+
+                const qr = qrcode(0, "L");
+                qr.addData(syncUrl);
+                qr.make();
+                container.innerHTML = qr.createImgTag(4);
+            } catch(e) {
+                document.getElementById("qrcode").innerHTML =
+                    "<p style='color:red'>Errore generazione QR: " + e.message + "</p>";
+            }
+        }
+
+        // Rimuovo eventuali vecchi listener dal bottone e ne metto uno nuovo pulito
+        window.addEventListener("load", function() {
+            const btn = document.getElementById("qrSyncBtn");
+            // Clono il bottone per azzerare tutti i listener esistenti
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+
+            newBtn.addEventListener("click", function() {
+                const box = document.getElementById("qrContainer");
+                if (box.style.display === "none" || box.style.display === "") {
+                    box.style.display = "block";
+                    generateQRCode();
+                } else {
+                    box.style.display = "none";
+                }
+            });
+        });
     </script>
 </body>
 </html>
