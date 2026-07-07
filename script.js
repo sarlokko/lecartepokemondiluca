@@ -274,9 +274,8 @@ function buildCardElement(card, options = {}) {
     const typeIconsHTML = types.map(t => `<img src="${TYPE_ICONS[t]}" class="type-icon" alt="${t}">`).join("");
 
     const div = document.createElement("div");
-    div.id = `card-${card.id}`;
+    div.dataset.pokemonId = card.id;
     div.className = `card${selectable ? " selectable" : ""}${owned ? " owned" : ""}${shinySet.has(card.id) ? " has-shiny" : ""}`;
-    if (selectable) div.onclick = () => toggleOwned(card.id);
 
     let extra = "";
     if (shinyBadge && shinySet.has(card.id)) extra += `<span class="shiny-badge">✨</span>`;
@@ -289,6 +288,11 @@ function buildCardElement(card, options = {}) {
         <div class="type-row">${typeIconsHTML}</div>
         ${showNote && getNote(card.id) ? `<p class="card-note">${escapeAttr(getNote(card.id))}</p>` : ""}
     `;
+
+    if (selectable) {
+        div.addEventListener("click", () => toggleOwned(card.id));
+    }
+
     return div;
 }
 
@@ -390,7 +394,8 @@ function toggleOwned(id) {
     saveOwnedFromSet();
     updateChallengeProgress();
 
-    const cardEl = document.getElementById(`card-${id}`);
+    const tabEl = document.getElementById(activeTab);
+    const cardEl = tabEl?.querySelector(`[data-pokemon-id="${id}"]`);
     if (cardEl) cardEl.classList.toggle("owned", ownedSet.has(id));
 
     updateProgressDashboard();
