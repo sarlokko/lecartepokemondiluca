@@ -118,44 +118,8 @@
         }
 
         // === QR CODE ===
-        // Sovrascrive generateQRCode di script.js con versione robusta.
-        // IMPORTANTE: mantiene lo stesso formato JSON {owned:[...]} che script.js
-        // si aspetta di leggere quando importa da ?sync=, altrimenti l'import si rompe.
-        function generateQRCode() {
-            const owned = JSON.parse(localStorage.getItem("ownedCards") || "[]");
-            const data = { owned: owned };
-            const encoded = btoa(JSON.stringify(data));
-            const syncUrl = "https://sarlokko.github.io/lecartepokemondiluca/?sync=" + encoded;
-            const container = document.getElementById("qrcode");
-
-            function showLinkFallback() {
-                container.innerHTML =
-                    '<p style="color:#b45309;">Hai ' + owned.length + ' carte possedute: il link è troppo lungo per un QR leggibile.</p>' +
-                    '<p>Copia questo link e aprilo sul cellulare (tocca per selezionare tutto):</p>' +
-                    '<textarea readonly onclick="this.select()" style="width:90%;max-width:500px;height:80px;font-size:12px;padding:8px;">' +
-                    syncUrl + '</textarea>';
-            }
-
-            // Controllo preventivo: se il link è troppo lungo, il QR sarebbe illeggibile
-            // o alcune API/librerie falliscono silenziosamente. Saltiamo dritti al fallback.
-            if (syncUrl.length > 1500) {
-                showLinkFallback();
-                return;
-            }
-
-            container.innerHTML = "<p>⏳ Generazione QR...</p>";
-            try {
-                if (typeof qrcode !== "function") throw new Error("libreria non caricata");
-                const qr = qrcode(0, "L");
-                qr.addData(syncUrl);
-                qr.make();
-                container.innerHTML = qr.createImgTag(4);
-            } catch (e) {
-                showLinkFallback();
-            }
-        }
-
-        // Rimpiazza il bottone per avere un solo listener pulito
+        // generateQRCode() è definita in script.js con codifica bitset compatta.
+        // Qui gestiamo solo il click del bottone, rimuovendo eventuali listener duplicati.
         window.addEventListener("load", function () {
             const btn = document.getElementById("qrSyncBtn");
             const newBtn = btn.cloneNode(true);
