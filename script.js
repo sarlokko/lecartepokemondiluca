@@ -55,8 +55,17 @@ const TYPE_ICONS = {
 
 const TOTAL_POKEMON = 1025;
 
+// Base64 URL-safe: evita + e / che rompono gli URL
+function toBase64Url(b64) {
+    return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function fromBase64Url(s) {
+    s = s.replace(/-/g, "+").replace(/_/g, "/");
+    while (s.length % 4) s += "=";
+    return s;
+}
+
 function encodeOwnedBitset(ownedIds) {
-    // Crea un array di byte (uno per ogni 8 pokemon)
     const bytes = new Uint8Array(Math.ceil(TOTAL_POKEMON / 8));
     ownedIds.forEach(id => {
         if (id >= 1 && id <= TOTAL_POKEMON) {
@@ -64,14 +73,13 @@ function encodeOwnedBitset(ownedIds) {
             bytes[Math.floor(idx / 8)] |= (1 << (idx % 8));
         }
     });
-    // Converte in stringa binaria e poi base64
     let binary = "";
     bytes.forEach(b => binary += String.fromCharCode(b));
-    return btoa(binary);
+    return toBase64Url(btoa(binary));
 }
 
 function decodeBitset(encoded) {
-    const binary = atob(encoded);
+    const binary = atob(fromBase64Url(encoded));
     const ids = [];
     for (let i = 0; i < binary.length; i++) {
         const byte = binary.charCodeAt(i);
@@ -85,10 +93,19 @@ function decodeBitset(encoded) {
     return ids;
 }
 
+function encodeMega(ownedMega) {
+    return toBase64Url(btoa(unescape(encodeURIComponent(JSON.stringify(ownedMega)))));
+}
+function decodeMega(encoded) {
+    return JSON.parse(decodeURIComponent(escape(atob(fromBase64Url(encoded)))));
+}
+
 function generateQRCode() {
     const owned = JSON.parse(localStorage.getItem("ownedCards") || "[]");
-    const encoded = encodeOwnedBitset(owned);
-    const syncUrl = "https://sarlokko.github.io/lecartepokemondiluca/?sync=" + encoded;
+    const ownedMega = JSON.parse(localStorage.getItem("ownedMega") || "[]");
+    const bitset = encodeOwnedBitset(owned);
+    const mega = encodeMega(ownedMega);
+    const syncUrl = "https://sarlokko.github.io/lecartepokemondiluca/?sync=" + bitset + "&mega=" + mega;
 
     const qrContainer = document.getElementById("qrcode");
     qrContainer.innerHTML = "";
@@ -104,7 +121,7 @@ function generateQRCode() {
     }
 }
 
-/* IMPORT DA URL ?sync= — supporta sia bitset (nuovo) che JSON (vecchio) */
+/* IMPORT DA URL — supporta ?sync= bitset + &mega= opzionale */
 (function () {
     const params = new URLSearchParams(window.location.search);
     if (params.has("sync")) {
@@ -112,23 +129,39 @@ function generateQRCode() {
             const raw = params.get("sync");
             let ownedIds;
 
-            // Prova prima il vecchio formato JSON
+            // Prova prima il vecchio formato JSON (retrocompatibilità)
             try {
-                const decoded = JSON.parse(atob(raw));
+                const decoded = JSON.parse(atob(fromBase64Url(raw)));
                 if (decoded.owned && Array.isArray(decoded.owned)) {
                     ownedIds = decoded.owned;
                 }
             } catch (_) {}
 
-            // Se non era JSON, usa il nuovo formato bitset
+            // Altrimenti usa il formato bitset
             if (!ownedIds) {
                 ownedIds = decodeBitset(raw);
             }
 
-            if (ownedIds && ownedIds.length >= 0) {
+            if (ownedIds) {
                 localStorage.setItem("ownedCards", JSON.stringify(ownedIds));
-                alert("Sincronizzazione completata! (" + ownedIds.length + " carte)");
             }
+
+            // Importa Mega/Gigamax se presenti
+            let megaCount = 0;
+            if (params.has("mega")) {
+                try {
+                    const megaList = decodeMega(params.get("mega"));
+                    if (Array.isArray(megaList)) {
+                        localStorage.setItem("ownedMega", JSON.stringify(megaList));
+                        megaCount = megaList.length;
+                    }
+                } catch (_) {}
+            }
+
+            alert("Sincronizzazione completata!\n" +
+                  "Carte: " + (ownedIds ? ownedIds.length : 0) +
+                  (megaCount > 0 ? "\nMega/Gigamax: " + megaCount : ""));
+
         } catch (e) {
             console.error("Errore importazione QR:", e);
             alert("Errore durante la sincronizzazione.");
