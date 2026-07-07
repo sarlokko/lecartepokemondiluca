@@ -1,26 +1,57 @@
 /* ===========================
    TAB MEGA / GIGAMAX
-   Usa limit=10000 per includere tutte le forme speciali
-   (le Mega/Gigamax hanno ID >10000 nell'API e sfuggono con limit=2000)
+   - Recupera tutte le forme Mega e Gigamax dalla PokéAPI
+   - Permette di selezionare quali si possiedono (salvato in localStorage "ownedMega")
+   - Collezione separata da quella principale
 =========================== */
 
 let megaGmaxCache = null;
 
+function getOwnedMega() {
+    return JSON.parse(localStorage.getItem("ownedMega") || "[]");
+}
+
+function saveOwnedMega(list) {
+    localStorage.setItem("ownedMega", JSON.stringify(list));
+}
+
+function toggleOwnedMega(name) {
+    let owned = getOwnedMega();
+    if (owned.includes(name)) {
+        owned = owned.filter(x => x !== name);
+    } else {
+        owned.push(name);
+    }
+    saveOwnedMega(owned);
+    // Aggiorna solo la card cliccata, senza ridisegnare tutto
+    const card = document.getElementById("megacard-" + CSS.escape(name));
+    if (card) {
+        if (owned.includes(name)) {
+            card.classList.add("owned");
+        } else {
+            card.classList.remove("owned");
+        }
+    }
+    updateMegaCounter();
+}
+
+function updateMegaCounter() {
+    const owned = getOwnedMega();
+    const counter = document.getElementById("mega-counter");
+    if (counter) counter.textContent = "Possedute: " + owned.length;
+}
+
 async function loadMegaGmaxData() {
     if (megaGmaxCache) return megaGmaxCache;
 
-    // Cache localStorage per evitare di richiamare l'API ad ogni visita
     const cached = localStorage.getItem("megaGmaxData_v2");
     if (cached) {
         try {
             megaGmaxCache = JSON.parse(cached);
             return megaGmaxCache;
-        } catch (e) {
-            // cache corrotta, ignora
-        }
+        } catch (e) {}
     }
 
-    // limit=10000 necessario: le forme Mega/Gmax hanno ID >10000 nell'API
     const listRes = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10000");
     const listData = await listRes.json();
 
@@ -29,20 +60,14 @@ async function loadMegaGmaxData() {
     );
 
     const results = [];
-
     for (const c of candidates) {
         try {
             const res = await fetch(c.url);
             const data = await res.json();
-
-            const speciesId = parseInt(
-                data.species.url.split("/").filter(Boolean).pop()
-            );
-
-            // Prova prima official-artwork, poi fallback su sprite normale
+            const speciesId = parseInt(data.species.url.split("/").filter(Boolean).pop());
             const img =
-                (data.sprites.other?.["official-artwork"]?.front_default) ||
-                (data.sprites.other?.home?.front_default) ||
+                data.sprites.other?.["official-artwork"]?.front_default ||
+                data.sprites.other?.home?.front_default ||
                 data.sprites.front_default ||
                 null;
 
@@ -57,17 +82,12 @@ async function loadMegaGmaxData() {
         }
     }
 
-    results.sort((a, b) => {
-        if (a.dexNumber !== b.dexNumber) return a.dexNumber - b.dexNumber;
-        return a.name.localeCompare(b.name);
-    });
+    results.sort((a, b) => a.dexNumber !== b.dexNumber
+        ? a.dexNumber - b.dexNumber
+        : a.name.localeCompare(b.name));
 
     megaGmaxCache = results;
-    try {
-        localStorage.setItem("megaGmaxData_v2", JSON.stringify(results));
-    } catch (e) {
-        // localStorage pieno, ignora
-    }
+    try { localStorage.setItem("megaGmaxData_v2", JSON.stringify(results)); } catch (e) {}
     return results;
 }
 
@@ -88,46 +108,59 @@ async function renderMegaGmax() {
     const container = document.getElementById("list-megagmax");
     container.innerHTML = `
         <div style="width:100%; text-align:center; padding:30px;">
-            <p>⏳ Caricamento in corso... (prima volta può richiedere qualche secondo)</p>
+            <p>⏳ Caricamento in corso...</p>
         </div>`;
 
     try {
         const data = await loadMegaGmaxData();
+        const owned = getOwnedMega();
+
+        container.innerHTML = `
+            <div style="width:100%; text-align:center; padding:10px 0 4px 0;">
+                <span id="mega-counter" style="font-weight:bold; color:#2a75bb;">
+                    Possedute: ${owned.length}
+                </span>
+                <span style="color:#888; font-size:13px; margin-left:10px;">
+                    (clicca una carta per segnarla come posseduta)
+                </span>
+            </div>
+        `;
+
+        data.forEach(p => {
+            const isOwned = owned.includes(p.name);
+            const badgeColor = p.kind === "Gigamax" ? "#8b5cf6" : "#e11d48";
+            const imgTag = p.img
+                ? `<img src="${p.img}" alt="${p.name}" class="card-img">`
+                : `<div style="height:100px;display:flex;align-items:center;justify-content:center;color:#aaa;">🚫</div>`;
+
+            const div = document.createElement("div");
+            div.id = "megacard-" + p.name;
+            div.className = "card selectable" + (isOwned ? " owned" : "");
+            div.onclick = () => toggleOwnedMega(p.name);
+            div.innerHTML = `
+                <p class="card-name" style="font-size:13px;">${formatFormName(p.name)}</p>
+                <p class="card-id">#${p.dexNumber}</p>
+                ${imgTag}
+                <div style="margin-top:8px;">
+                    <span style="
+                        display:inline-block;
+                        padding:3px 8px;
+                        border-radius:12px;
+                        font-size:11px;
+                        font-weight:bold;
+                        color:white;
+                        background:${badgeColor};
+                    ">${p.kind}</span>
+                </div>
+            `;
+            container.appendChild(div);
+        });
 
         if (data.length === 0) {
             container.innerHTML = "<p style='text-align:center;width:100%;'>Nessun dato trovato.</p>";
-            return;
         }
 
-        container.innerHTML = "";
-        data.forEach(p => {
-            const imgTag = p.img
-                ? `<img src="${p.img}" alt="${p.name}" class="card-img">`
-                : `<div style="height:100px;display:flex;align-items:center;justify-content:center;color:#aaa;">🚫 Immagine non disponibile</div>`;
-
-            const badgeColor = p.kind === "Gigamax" ? "#8b5cf6" : "#e11d48";
-
-            container.innerHTML += `
-                <div class="card">
-                    <p class="card-name" style="font-size:14px;">${formatFormName(p.name)}</p>
-                    <p class="card-id">#${p.dexNumber}</p>
-                    ${imgTag}
-                    <div style="margin-top:8px;">
-                        <span style="
-                            display:inline-block;
-                            padding:3px 8px;
-                            border-radius:12px;
-                            font-size:11px;
-                            font-weight:bold;
-                            color:white;
-                            background:${badgeColor};
-                        ">${p.kind}</span>
-                    </div>
-                </div>
-            `;
-        });
-
     } catch (err) {
-        container.innerHTML = `<p style="text-align:center;width:100%;color:red;">⚠️ Errore nel caricamento: ${err.message}</p>`;
+        container.innerHTML = `<p style="text-align:center;width:100%;color:red;">⚠️ Errore: ${err.message}</p>`;
     }
 }
