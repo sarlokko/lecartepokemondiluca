@@ -24,6 +24,7 @@ function toggleOwnedMega(name) {
     }
     saveOwnedMega(owned);
     if (typeof updateChallengeProgress === "function") updateChallengeProgress();
+    if (typeof renderChallenges === "function" && activeTab === "challenges") renderChallenges();
     // Aggiorna solo la card cliccata, senza ridisegnare tutto
     const card = document.getElementById("megacard-" + CSS.escape(name));
     if (card) {

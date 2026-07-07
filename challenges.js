@@ -150,8 +150,7 @@ function getChallengeProgress(challenge, state) {
     }
 }
 
-function updateChallengeProgress() {
-    const state = getChallengeState();
+function processChallengeCompletions(state) {
     let anyNew = false;
     state.challenges.forEach(c => {
         const { current, target } = getChallengeProgress(c, state);
@@ -161,9 +160,13 @@ function updateChallengeProgress() {
             showToast(`🏆 Sfida completata: ${c.label}`, "success", 4500);
         }
     });
-    saveChallengeState(state);
-    if (activeTab === "challenges") renderChallenges();
+    if (anyNew) saveChallengeState(state);
     return anyNew;
+}
+
+function updateChallengeProgress() {
+    const state = getChallengeState();
+    processChallengeCompletions(state);
 }
 
 function recordBattleWin() {
@@ -176,11 +179,21 @@ function recordBattleWin() {
 function renderChallenges() {
     const container = document.getElementById("challenges-content");
     if (!container) return;
+
     const state = getChallengeState();
-    updateChallengeProgress();
+    processChallengeCompletions(state);
 
     const completed = state.completedIds.length;
     const total = state.challenges.length;
+
+    if (!state.challenges.length) {
+        container.innerHTML = `
+            <div class="challenges-header">
+                <h2>🏆 Sfide della settimana</h2>
+                <p class="week-label">Nessuna sfida disponibile. Ricarica la pagina.</p>
+            </div>`;
+        return;
+    }
 
     let html = `
         <div class="challenges-header">

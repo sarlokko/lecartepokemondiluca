@@ -17,6 +17,7 @@ function toggleShiny(id) {
 
     updateProgressDashboard();
     if (activeTab === "shiny") renderShiny();
+    else if (activeTab === "challenges") renderChallenges();
 }
 
 function renderShiny() {

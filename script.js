@@ -400,6 +400,7 @@ function toggleOwned(id) {
 
     updateProgressDashboard();
     if (activeTab === "owned" || activeTab === "missing") renderActiveTab();
+    else if (activeTab === "challenges") renderChallenges();
 }
 
 /* ===========================
