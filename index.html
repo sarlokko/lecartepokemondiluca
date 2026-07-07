@@ -3,137 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#cc0000">
+    <meta name="description" content="La collezione di carte Pokémon di Luca">
     <title>Le Carte Pokémon di Luca</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
     <script src="pokemon-list.js"></script>
+    <script src="pokemon-types.js"></script>
 </head>
 <body>
-    <!-- TITOLO CENTRATO + QR A DESTRA -->
-    <div style="position: relative; padding: 0 20px; margin-top: 10px;">
-        <h1 style="text-align: center; margin: 0;">Le Carte Pokémon di Luca</h1>
-        <button id="qrSyncBtn" style="
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 8px 14px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        ">Aggiorna 🔄</button>
+    <div class="header-bar">
+        <h1>Le Carte Pokémon di Luca</h1>
+        <button id="qrSyncBtn" class="qr-btn">Aggiorna 🔄</button>
     </div>
-    <!-- QR CODE -->
-    <div id="qrContainer" style="display:none; margin-top: 15px; text-align:center;">
+
+    <div id="qrContainer" class="qr-container" style="display:none;">
         <p>Scansiona questo QR dal cellulare per sincronizzare i posseduti:</p>
         <div id="qrcode"></div>
     </div>
-    <!-- RICERCA -->
+
+    <div id="progress-dashboard" class="progress-dashboard"></div>
+
     <input type="text" id="search" placeholder="Cerca una carta...">
-    <!-- NAVIGAZIONE -->
+
     <nav>
         <button onclick="showTab('home')" id="tab-home" class="active">Home</button>
         <button onclick="showTab('select')" id="tab-select">Seleziona</button>
         <button onclick="showTab('owned')" id="tab-owned">Possedute</button>
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
+        <button onclick="showTab('shiny')" id="tab-shiny">Shiny ✨</button>
         <button onclick="showTab('battle')" id="tab-battle">Lotte</button>
         <button onclick="showTab('megamax')" id="tab-megamax">Mega/Gigamax</button>
+        <button onclick="showTab('challenges')" id="tab-challenges">Sfide 🏆</button>
     </nav>
-    <!-- TAB HOME -->
+
     <div id="home" class="tab">
         <div id="list-home" class="list-container"></div>
         <div id="pagination-home"></div>
     </div>
-    <!-- TAB SELECT -->
+
     <div id="select" class="tab" style="display:none;">
         <div id="list-select" class="list-container"></div>
         <div id="pagination-select"></div>
     </div>
-    <!-- TAB OWNED -->
+
     <div id="owned" class="tab" style="display:none;">
+        <p class="tab-hint">Tocca ✏️ per aggiungere una nota alla carta</p>
         <div id="list-owned" class="list-container"></div>
         <div id="pagination-owned"></div>
     </div>
-    <!-- TAB MISSING -->
+
     <div id="missing" class="tab" style="display:none;">
+        <div class="filter-row">
+            <label for="missing-type-filter">Filtra per tipo:</label>
+            <select id="missing-type-filter">
+                <option value="">Tutti i tipi</option>
+                <option value="normal">Normale</option>
+                <option value="fire">Fuoco</option>
+                <option value="water">Acqua</option>
+                <option value="grass">Erba</option>
+                <option value="electric">Elettro</option>
+                <option value="ice">Ghiaccio</option>
+                <option value="fighting">Lotta</option>
+                <option value="poison">Veleno</option>
+                <option value="ground">Terra</option>
+                <option value="flying">Volante</option>
+                <option value="psychic">Psico</option>
+                <option value="bug">Coleottero</option>
+                <option value="rock">Roccia</option>
+                <option value="ghost">Spettro</option>
+                <option value="dragon">Drago</option>
+                <option value="dark">Buio</option>
+                <option value="steel">Acciaio</option>
+                <option value="fairy">Folletto</option>
+            </select>
+        </div>
         <div id="list-missing" class="list-container"></div>
         <div id="pagination-missing"></div>
     </div>
-    <!-- TAB BATTLE (LOTTE) -->
-    <div id="battle" class="tab" style="display:none;">
-        <div style="text-align:center; margin-top:20px;">
-            <button id="pickBtn" onclick="pickRandomBattlers()" style="
-                padding:10px 18px;
-                font-size:16px;
-                background:#28a745;
-                color:#fff;
-                border:none;
-                border-radius:6px;
-                cursor:pointer;
-            ">🎲 Scegli 2 Pokémon a caso</button>
-        </div>
-        <div id="battlePreview" style="display:flex; justify-content:center; gap:40px; margin-top:20px; flex-wrap:wrap;"></div>
-        <div id="winnerChoice" style="display:none; text-align:center; margin-top:20px;">
-            <p><strong>Chi vincerà?</strong></p>
-            <select id="winnerSelect" style="font-size:16px; padding:6px;"></select>
-            <br><br>
-            <button onclick="runBattle()" style="
-                padding:10px 18px;
-                font-size:16px;
-                background:#dc3545;
-                color:#fff;
-                border:none;
-                border-radius:6px;
-                cursor:pointer;
-            ">⚔️ Lotta!</button>
-        </div>
-        <div id="battleResult" style="margin-top:25px;"></div>
+
+    <div id="shiny" class="tab" style="display:none;">
+        <p class="tab-hint">✨ Segna gli Shiny posseduti — devi avere la carta normale prima!</p>
+        <div id="list-shiny" class="list-container"></div>
+        <div id="pagination-shiny"></div>
     </div>
-    <!-- TAB MEGA/GIGAMAX -->
+
+    <div id="battle" class="tab" style="display:none;">
+        <div class="battle-controls">
+            <button id="pickBtn" onclick="pickRandomBattlers()" class="btn-green">🎲 Scegli 2 Pokémon a caso</button>
+        </div>
+        <div id="battlePreview" class="battle-preview"></div>
+        <div id="winnerChoice" style="display:none;" class="battle-choice">
+            <p><strong>Chi vincerà?</strong></p>
+            <select id="winnerSelect"></select>
+            <br><br>
+            <button onclick="runBattle()" class="btn-red">⚔️ Lotta!</button>
+        </div>
+        <div id="battleResult"></div>
+    </div>
+
     <div id="megamax" class="tab" style="display:none;">
         <div id="list-megagmax" class="list-container"></div>
     </div>
 
+    <div id="challenges" class="tab" style="display:none;">
+        <div id="challenges-content"></div>
+    </div>
+
+    <script src="ui.js"></script>
+    <script src="notes.js"></script>
     <script src="script.js"></script>
+    <script src="shiny.js"></script>
+    <script src="challenges.js"></script>
     <script src="battle.js"></script>
     <script src="megamax.js"></script>
-
-    <script>
-        // === CAMBIO TAB ===
-        function showTab(tab) {
-            document.querySelectorAll(".tab").forEach(t => t.style.display = "none");
-            document.getElementById(tab).style.display = "block";
-            document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-            document.getElementById("tab-" + tab).classList.add("active");
-            if (tab === "megamax" && !window.__megamaxLoaded) {
-                window.__megamaxLoaded = true;
-                renderMegaGmax();
-            }
-        }
-
-        // === QR CODE ===
-        // generateQRCode() è definita in script.js con codifica bitset compatta.
-        // Qui gestiamo solo il click del bottone, rimuovendo eventuali listener duplicati.
-        window.addEventListener("load", function () {
-            const btn = document.getElementById("qrSyncBtn");
-            const newBtn = btn.cloneNode(true);
-            btn.parentNode.replaceChild(newBtn, btn);
-            newBtn.addEventListener("click", function () {
-                const box = document.getElementById("qrContainer");
-                if (box.style.display === "none" || box.style.display === "") {
-                    box.style.display = "block";
-                    generateQRCode();
-                } else {
-                    box.style.display = "none";
-                }
-            });
-        });
-    </script>
 </body>
 </html>

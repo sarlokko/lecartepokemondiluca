@@ -1,0 +1,23 @@
+{
+  "name": "Le Carte Pokémon di Luca",
+  "short_name": "Carte Luca",
+  "description": "Collezione carte Pokémon di Luca",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff3cd",
+  "theme_color": "#cc0000",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

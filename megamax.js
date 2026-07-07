@@ -23,6 +23,7 @@ function toggleOwnedMega(name) {
         owned.push(name);
     }
     saveOwnedMega(owned);
+    if (typeof updateChallengeProgress === "function") updateChallengeProgress();
     // Aggiorna solo la card cliccata, senza ridisegnare tutto
     const card = document.getElementById("megacard-" + CSS.escape(name));
     if (card) {
@@ -33,6 +34,7 @@ function toggleOwnedMega(name) {
         }
     }
     updateMegaCounter();
+    if (typeof updateProgressDashboard === "function") updateProgressDashboard();
 }
 
 function updateMegaCounter() {

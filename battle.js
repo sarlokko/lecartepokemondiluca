@@ -131,9 +131,10 @@ async function runBattle() {
 
     const userChoice = document.getElementById("winnerSelect").value;
     const userPick = userChoice === "1" ? battler1 : battler2;
-    const correct = userPick.id === predictedWinner.id;
+        const correct = userPick.id === predictedWinner.id;
+        if (correct && typeof recordBattleWin === "function") recordBattleWin();
 
-    resultDiv.innerHTML = `
+        resultDiv.innerHTML = `
       <div style="border:2px solid #28a745;border-radius:10px;padding:18px;max-width:600px;margin:0 auto;">
         <h3 style="text-align:center;">🏆 Vince ${predictedWinner.name}!</h3>
         <p style="text-align:center;">${correct ? "✅ Hai indovinato!" : "❌ Avevi scelto l'altro, peccato!"}</p>

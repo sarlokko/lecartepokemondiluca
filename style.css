@@ -186,3 +186,285 @@ nav button.active {
     color: #2a2a2a;
     font-weight: bold;
 }
+
+/* ===========================
+   HEADER
+=========================== */
+.header-bar {
+    position: relative;
+    padding: 0 20px;
+    margin-top: 10px;
+}
+.qr-btn {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px 14px;
+    background-color: #2a75bb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+.qr-btn:hover { background-color: #3d8fd6; }
+.qr-container {
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* ===========================
+   PROGRESS DASHBOARD
+=========================== */
+.progress-dashboard {
+    max-width: 700px;
+    margin: 12px auto 0;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 16px;
+    border: 3px solid #2a75bb;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+.dashboard-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+.stat-box {
+    text-align: center;
+    min-width: 80px;
+}
+.stat-num {
+    display: block;
+    font-size: 22px;
+    font-weight: bold;
+    color: #2a75bb;
+}
+.stat-label {
+    font-size: 12px;
+    color: #666;
+}
+.shiny-stat .stat-num { color: #e6a800; }
+.overall-progress { margin: 8px 0; }
+.progress-bar-wrap {
+    background: #e0e0e0;
+    border-radius: 10px;
+    height: 18px;
+    overflow: hidden;
+}
+.progress-bar-wrap.small { height: 12px; }
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2a75bb, #3d8fd6);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+}
+.progress-bar-fill.gold {
+    background: linear-gradient(90deg, #ffcb05, #ffe066);
+}
+.gen-details {
+    margin-top: 10px;
+    font-size: 14px;
+}
+.gen-details summary {
+    cursor: pointer;
+    color: #2a75bb;
+    font-weight: bold;
+}
+.gen-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0;
+}
+.gen-label { min-width: 55px; font-size: 13px; }
+.gen-count { min-width: 55px; font-size: 12px; color: #666; text-align: right; }
+.gen-progress-row .progress-bar-wrap { flex: 1; }
+
+/* ===========================
+   TOAST
+=========================== */
+#toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+.toast {
+    padding: 12px 20px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    max-width: 90vw;
+    text-align: center;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast-success { background: #2e7d32; }
+.toast-error { background: #c62828; }
+.toast-warn { background: #e65100; }
+
+/* ===========================
+   TAB HINTS & FILTERS
+=========================== */
+.tab-hint {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin: 12px 0 4px;
+}
+.filter-row {
+    text-align: center;
+    margin: 12px 0;
+}
+.filter-row select {
+    padding: 6px 12px;
+    border: 2px solid #2a75bb;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* ===========================
+   SHINY
+=========================== */
+.shiny-card.owned {
+    border-color: #e6a800;
+    background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
+    box-shadow: 0 0 12px rgba(255,203,5,0.5);
+}
+.shiny-img {
+    filter: saturate(1.3) brightness(1.05);
+}
+.shiny-sparkle { font-size: 16px; }
+.shiny-status {
+    font-size: 12px;
+    color: #888;
+    margin: 6px 0 0;
+}
+.shiny-badge {
+    font-size: 14px;
+    margin-left: 4px;
+}
+.card.has-shiny {
+    box-shadow: 0 0 8px rgba(255,203,5,0.35);
+}
+
+/* ===========================
+   NOTE
+=========================== */
+.note-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px;
+    vertical-align: middle;
+}
+.note-badge { font-size: 14px; margin-left: 4px; }
+.card-note {
+    font-size: 11px;
+    color: #555;
+    font-style: italic;
+    margin: 6px 0 0;
+    word-break: break-word;
+}
+
+/* ===========================
+   SFIDE
+=========================== */
+.challenges-header {
+    text-align: center;
+    margin: 16px 0 20px;
+}
+.challenges-header h2 {
+    font-family: "Press Start 2P", Arial, sans-serif;
+    font-size: 16px;
+    color: #2a75bb;
+    margin: 0 0 8px;
+}
+.week-label { color: #666; font-size: 14px; }
+.challenge-card {
+    max-width: 500px;
+    margin: 12px auto;
+    padding: 16px;
+    background: white;
+    border: 3px solid #2a75bb;
+    border-radius: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+.challenge-card.done {
+    border-color: #2e7d32;
+    background: #e8f5e9;
+}
+.challenge-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+.challenge-progress {
+    font-size: 13px;
+    color: #666;
+    margin-top: 6px;
+    text-align: right;
+}
+
+/* ===========================
+   LOTTE
+=========================== */
+.battle-controls { text-align: center; margin-top: 20px; }
+.battle-preview {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+.battle-choice { text-align: center; margin-top: 20px; }
+.btn-green, .btn-red {
+    padding: 10px 18px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-green { background: #28a745; }
+.btn-green:hover { background: #218838; }
+.btn-red { background: #dc3545; }
+.btn-red:hover { background: #c82333; }
+#battleResult { margin-top: 25px; }
+
+/* ===========================
+   PAGINAZIONE CENTRATA
+=========================== */
+[id^="pagination-"] {
+    text-align: center;
+    padding: 10px 0 20px;
+}
+
+@media (max-width: 600px) {
+    .qr-btn {
+        position: static;
+        transform: none;
+        display: block;
+        margin: 8px auto 0;
+    }
+    .header-bar { text-align: center; }
+    .stat-num { font-size: 18px; }
+    .challenges-header h2 { font-size: 12px; }
+    nav button { font-size: 13px; padding: 8px 12px; }
+}
