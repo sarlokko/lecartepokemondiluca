@@ -273,12 +273,12 @@ async function runBattle() {
                     <div class="result-mini ${predictedWinner.id === battler1.id ? "winner-mini" : "loser-mini"}">
                         <img src="${battler1.img}" alt="">
                         <span>${battler1.name}</span>
-                        <span class="score-tag">${Math.round(winnerIs1 ? score1 : score2)} pt</span>
+                        <span class="score-tag">${Math.round(score1)} pt</span>
                     </div>
                     <div class="result-mini ${predictedWinner.id === battler2.id ? "winner-mini" : "loser-mini"}">
                         <img src="${battler2.img}" alt="">
                         <span>${battler2.name}</span>
-                        <span class="score-tag">${Math.round(winnerIs1 ? score2 : score1)} pt</span>
+                        <span class="score-tag">${Math.round(score2)} pt</span>
                     </div>
                 </div>
 
