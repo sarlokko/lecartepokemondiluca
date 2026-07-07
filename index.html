@@ -95,15 +95,19 @@
     </div>
 
     <div id="battle" class="tab" style="display:none;">
+        <div class="battle-header">
+            <h2 class="battle-title">⚔️ Arena Lotte</h2>
+            <p class="tab-hint">Scegli 2 Pokémon a caso e indovina chi vince!</p>
+        </div>
+        <div id="battle-stats"></div>
         <div class="battle-controls">
-            <button id="pickBtn" onclick="pickRandomBattlers()" class="btn-green">🎲 Scegli 2 Pokémon a caso</button>
+            <button id="pickBtn" onclick="pickRandomBattlers()" class="btn-green btn-battle-pick">🎲 Scegli 2 Pokémon a caso</button>
         </div>
         <div id="battlePreview" class="battle-preview"></div>
         <div id="winnerChoice" style="display:none;" class="battle-choice">
-            <p><strong>Chi vincerà?</strong></p>
-            <select id="winnerSelect"></select>
-            <br><br>
-            <button onclick="runBattle()" class="btn-red">⚔️ Lotta!</button>
+            <p class="battle-pick-label"><strong>Chi vincerà?</strong></p>
+            <select id="winnerSelect" class="battle-select"></select>
+            <button onclick="runBattle()" class="btn-red btn-battle-fight">⚔️ Lotta!</button>
         </div>
         <div id="battleResult"></div>
     </div>

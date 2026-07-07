@@ -1,4 +1,4 @@
-const CACHE = "luca-pokemon-v3";
+const CACHE = "luca-pokemon-v4";
 const ASSETS = [
     "./",
     "./index.html",

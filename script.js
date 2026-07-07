@@ -356,6 +356,7 @@ function showTab(tab) {
         renderMegaGmax();
     }
     if (tab !== "megamax" && tab !== "battle") renderActiveTab();
+    if (tab === "battle" && typeof renderBattleStats === "function") renderBattleStats();
 }
 
 /* ===========================

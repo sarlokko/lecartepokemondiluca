@@ -14,6 +14,10 @@ const CHALLENGE_POOL = [
     { type: "new_type", pokeType: "electric", target: 2, label: "Colleziona {n} Pokémon Elettro" },
     { type: "battle_guess", target: 5, label: "Indovina {n} vincitori nelle lotte" },
     { type: "battle_guess", target: 3, label: "Indovina {n} vincitori nelle lotte" },
+    { type: "battle_fight", target: 10, label: "Gioca {n} lotte in arena" },
+    { type: "battle_fight", target: 5, label: "Gioca {n} lotte in arena" },
+    { type: "battle_streak", target: 3, label: "Indovina {n} vincitori di fila" },
+    { type: "battle_streak", target: 2, label: "Indovina {n} vincitori di fila" },
     { type: "gen_percent", gen: 1, target: 30, label: "Completa almeno il {n}% della Gen I" },
     { type: "gen_percent", gen: 2, target: 25, label: "Completa almeno il {n}% della Gen II" },
     { type: "new_mega", target: 2, label: "Ottieni {n} forme Mega/Gigamax" },
@@ -84,9 +88,16 @@ function getChallengeState() {
                 battleWins: 0
             },
             battleWins: 0,
+            battleTotal: 0,
+            bestBattleStreak: 0,
+            currentBattleStreak: 0,
             completedIds: []
         };
         localStorage.setItem("challengeState", JSON.stringify(state));
+    } else {
+        if (state.battleTotal == null) state.battleTotal = state.battleWins || 0;
+        if (state.bestBattleStreak == null) state.bestBattleStreak = 0;
+        if (state.currentBattleStreak == null) state.currentBattleStreak = 0;
     }
     return state;
 }
@@ -143,6 +154,8 @@ function getChallengeProgress(challenge, state) {
         case "new_gen": return { current: countNewGen(state, challenge.gen), target: challenge.target };
         case "new_type": return { current: countNewType(state, challenge.pokeType), target: challenge.target };
         case "battle_guess": return { current: state.battleWins, target: challenge.target };
+        case "battle_fight": return { current: state.battleTotal, target: challenge.target };
+        case "battle_streak": return { current: state.bestBattleStreak, target: challenge.target };
         case "gen_percent": return { current: genPercent(challenge.gen), target: challenge.target };
         case "new_mega": return { current: countNewMega(state), target: challenge.target };
         case "collect_type_total": return { current: countTypeTotal(challenge.pokeType), target: challenge.target };
@@ -169,11 +182,36 @@ function updateChallengeProgress() {
     processChallengeCompletions(state);
 }
 
-function recordBattleWin() {
+function recordBattleInChallenges(correct) {
     const state = getChallengeState();
-    state.battleWins++;
+    state.battleTotal++;
+    if (correct) {
+        state.battleWins++;
+        state.currentBattleStreak++;
+        if (state.currentBattleStreak > state.bestBattleStreak) {
+            state.bestBattleStreak = state.currentBattleStreak;
+        }
+    } else {
+        state.currentBattleStreak = 0;
+    }
     saveChallengeState(state);
     updateChallengeProgress();
+}
+
+function getBattleChallengeSummary(state) {
+    const allTime = typeof getBattleStats === "function" ? getBattleStats() : { correct: 0, wrong: 0, total: 0, bestStreak: 0 };
+    const pct = allTime.total ? Math.round((allTime.correct / allTime.total) * 100) : 0;
+    return `
+        <div class="challenge-card battle-challenge-summary">
+            <div class="challenge-title">⚔️ Lotte — riepilogo</div>
+            <div class="battle-summary-grid">
+                <div><span class="summary-num">${state.battleWins}</span><span class="summary-lbl">Indovinati (settimana)</span></div>
+                <div><span class="summary-num">${state.battleTotal}</span><span class="summary-lbl">Lotte giocate</span></div>
+                <div><span class="summary-num">${state.bestBattleStreak}</span><span class="summary-lbl">Miglior serie</span></div>
+                <div><span class="summary-num">${pct}%</span><span class="summary-lbl">Precisione totale</span></div>
+            </div>
+            <p class="battle-summary-hint">Vai in tab Lotte per giocare e completare le sfide ⚔️</p>
+        </div>`;
 }
 
 function renderChallenges() {
@@ -200,6 +238,7 @@ function renderChallenges() {
             <h2>🏆 Sfide della settimana</h2>
             <p class="week-label">Settimana ${state.weekKey} — Completate: ${completed}/${total}</p>
         </div>
+        ${getBattleChallengeSummary(state)}
     `;
 
     state.challenges.forEach(c => {
