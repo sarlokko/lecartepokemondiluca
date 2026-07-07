@@ -1,4 +1,4 @@
-const CACHE = "luca-pokemon-v5";
+const CACHE = "luca-pokemon-v6";
 const ASSETS = [
     "./",
     "./index.html",
@@ -12,6 +12,7 @@ const ASSETS = [
     "./megamax.js",
     "./pokemon-list.js",
     "./pokemon-types.js",
+    "./mega-gmax-list.js",
     "./manifest.json",
     "./icons/icon.svg"
 ];

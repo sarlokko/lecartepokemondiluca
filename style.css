@@ -692,6 +692,41 @@ nav button.active {
 .btn-red:hover { background: #c82333; }
 #battleResult { margin-top: 8px; padding-bottom: 30px; }
 
+/* ===========================
+   MEGA / GIGAMAX
+=========================== */
+.mega-header {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0 4px;
+}
+.mega-counter { font-weight: bold; color: #2a75bb; }
+.mega-hint { color: #888; font-size: 13px; margin-left: 10px; }
+.mega-card-name { font-size: 13px !important; }
+.mega-form-img { min-height: 100px; object-fit: contain; }
+.mega-img-placeholder {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 28px;
+}
+.mega-kind-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+}
+.badge-mega { background: #e11d48; }
+.badge-gmax { background: #8b5cf6; }
+.mega-card.owned { border-color: #2e7d32; background: #e8f5e9; }
+.mega-loading, .mega-empty { width: 100%; text-align: center; padding: 30px; }
+.mega-error { color: #c62828; }
+
 @media (max-width: 600px) {
     .battle-title { font-size: 12px; }
     .battle-stat-pill { min-width: 70px; padding: 8px 10px; }
