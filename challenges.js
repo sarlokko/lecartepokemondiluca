@@ -18,6 +18,12 @@ const CHALLENGE_POOL = [
     { type: "battle_fight", target: 5, label: "Gioca {n} lotte in arena" },
     { type: "battle_streak", target: 3, label: "Indovina {n} vincitori di fila" },
     { type: "battle_streak", target: 2, label: "Indovina {n} vincitori di fila" },
+    { type: "type_quiz_guess", target: 5, label: "Indovina {n} tipi in Di che tipo è?" },
+    { type: "type_quiz_guess", target: 3, label: "Indovina {n} tipi in Di che tipo è?" },
+    { type: "type_quiz_play", target: 10, label: "Gioca {n} round in Di che tipo è?" },
+    { type: "type_quiz_play", target: 5, label: "Gioca {n} round in Di che tipo è?" },
+    { type: "type_quiz_streak", target: 3, label: "Indovina {n} tipi di fila" },
+    { type: "type_quiz_streak", target: 2, label: "Indovina {n} tipi di fila" },
     { type: "gen_percent", gen: 1, target: 30, label: "Completa almeno il {n}% della Gen I" },
     { type: "gen_percent", gen: 2, target: 25, label: "Completa almeno il {n}% della Gen II" },
     { type: "new_mega", target: 2, label: "Ottieni {n} forme Mega/Gigamax" },
@@ -91,6 +97,10 @@ function getChallengeState() {
             battleTotal: 0,
             bestBattleStreak: 0,
             currentBattleStreak: 0,
+            typeQuizWins: 0,
+            typeQuizTotal: 0,
+            bestTypeQuizStreak: 0,
+            currentTypeQuizStreak: 0,
             completedIds: []
         };
         localStorage.setItem("challengeState", JSON.stringify(state));
@@ -98,6 +108,10 @@ function getChallengeState() {
         if (state.battleTotal == null) state.battleTotal = state.battleWins || 0;
         if (state.bestBattleStreak == null) state.bestBattleStreak = 0;
         if (state.currentBattleStreak == null) state.currentBattleStreak = 0;
+        if (state.typeQuizWins == null) state.typeQuizWins = 0;
+        if (state.typeQuizTotal == null) state.typeQuizTotal = 0;
+        if (state.bestTypeQuizStreak == null) state.bestTypeQuizStreak = 0;
+        if (state.currentTypeQuizStreak == null) state.currentTypeQuizStreak = 0;
     }
     return state;
 }
@@ -156,6 +170,9 @@ function getChallengeProgress(challenge, state) {
         case "battle_guess": return { current: state.battleWins, target: challenge.target };
         case "battle_fight": return { current: state.battleTotal, target: challenge.target };
         case "battle_streak": return { current: state.bestBattleStreak, target: challenge.target };
+        case "type_quiz_guess": return { current: state.typeQuizWins, target: challenge.target };
+        case "type_quiz_play": return { current: state.typeQuizTotal, target: challenge.target };
+        case "type_quiz_streak": return { current: state.bestTypeQuizStreak, target: challenge.target };
         case "gen_percent": return { current: genPercent(challenge.gen), target: challenge.target };
         case "new_mega": return { current: countNewMega(state), target: challenge.target };
         case "collect_type_total": return { current: countTypeTotal(challenge.pokeType), target: challenge.target };
@@ -196,6 +213,40 @@ function recordBattleInChallenges(correct) {
     }
     saveChallengeState(state);
     updateChallengeProgress();
+}
+
+function recordTypeQuizInChallenges(result) {
+    const state = getChallengeState();
+    if (result === "correct" || result === "wrong") state.typeQuizTotal++;
+    if (result === "correct") {
+        state.typeQuizWins++;
+        state.currentTypeQuizStreak++;
+        if (state.currentTypeQuizStreak > state.bestTypeQuizStreak) {
+            state.bestTypeQuizStreak = state.currentTypeQuizStreak;
+        }
+    } else if (result === "wrong") {
+        state.currentTypeQuizStreak = 0;
+    }
+    saveChallengeState(state);
+    updateChallengeProgress();
+}
+
+function getTypeQuizChallengeSummary(state) {
+    const allTime = typeof getTypeQuizStats === "function"
+        ? getTypeQuizStats()
+        : { correct: 0, wrong: 0, total: 0, almost: 0, bestStreak: 0 };
+    const pct = allTime.total ? Math.round((allTime.correct / allTime.total) * 100) : 0;
+    return `
+        <div class="challenge-card typequiz-challenge-summary">
+            <div class="challenge-title">🎯 Di che tipo è? — riepilogo</div>
+            <div class="battle-summary-grid">
+                <div><span class="summary-num">${state.typeQuizWins}</span><span class="summary-lbl">Indovinati (settimana)</span></div>
+                <div><span class="summary-num">${state.typeQuizTotal}</span><span class="summary-lbl">Tentativi (settimana)</span></div>
+                <div><span class="summary-num">${state.bestTypeQuizStreak}</span><span class="summary-lbl">Miglior serie</span></div>
+                <div><span class="summary-num">${pct}%</span><span class="summary-lbl">Precisione totale</span></div>
+            </div>
+            <p class="battle-summary-hint">Vai in tab Di che tipo è? per giocare e completare le sfide 🎯</p>
+        </div>`;
 }
 
 function getBattleChallengeSummary(state) {
@@ -239,6 +290,7 @@ function renderChallenges() {
             <p class="week-label">Settimana ${state.weekKey} — Completate: ${completed}/${total}</p>
         </div>
         ${getBattleChallengeSummary(state)}
+        ${getTypeQuizChallengeSummary(state)}
     `;
 
     state.challenges.forEach(c => {

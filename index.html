@@ -40,6 +40,7 @@
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
         <button onclick="showTab('shiny')" id="tab-shiny">Shiny ✨</button>
         <button onclick="showTab('battle')" id="tab-battle">Lotte</button>
+        <button onclick="showTab('typequiz')" id="tab-typequiz">Di che tipo è?</button>
         <button onclick="showTab('megamax')" id="tab-megamax">Mega/Gigamax</button>
         <button onclick="showTab('challenges')" id="tab-challenges">Sfide 🏆</button>
     </nav>
@@ -113,6 +114,22 @@
         <div id="battleResult"></div>
     </div>
 
+    <div id="typequiz" class="tab" style="display:none;">
+        <div class="typequiz-header">
+            <h2 class="typequiz-title">🎯 Di che tipo è?</h2>
+            <p class="tab-hint">Guarda il Pokémon, scegli il tipo (1 o 2) e premi Indovina — 3 tentativi!</p>
+        </div>
+        <div id="typequiz-stats"></div>
+        <div id="typequiz-card"></div>
+        <p id="typequiz-attempts" class="typequiz-attempts"></p>
+        <div id="typequiz-type-grid" class="typequiz-type-grid"></div>
+        <div id="typequiz-feedback" class="typequiz-feedback"></div>
+        <div id="typequiz-actions" class="typequiz-actions">
+            <button type="button" onclick="submitTypeGuess()" class="btn-green btn-typequiz-guess">Indovina</button>
+            <button type="button" onclick="skipTypeQuizPokemon()" class="btn-red btn-typequiz-skip">Salta</button>
+        </div>
+    </div>
+
     <div id="megamax" class="tab" style="display:none;">
         <div id="list-megagmax" class="list-container"></div>
     </div>
@@ -127,6 +144,7 @@
     <script src="shiny.js"></script>
     <script src="challenges.js"></script>
     <script src="battle.js"></script>
+    <script src="typequiz.js"></script>
     <script src="megamax.js"></script>
 </body>
 </html>

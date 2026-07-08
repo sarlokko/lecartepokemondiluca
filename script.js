@@ -355,8 +355,9 @@ function showTab(tab) {
         window.__megamaxLoaded = true;
         renderMegaGmax();
     }
-    if (tab !== "megamax" && tab !== "battle") renderActiveTab();
+    if (tab !== "megamax" && tab !== "battle" && tab !== "typequiz") renderActiveTab();
     if (tab === "battle" && typeof renderBattleStats === "function") renderBattleStats();
+    if (tab === "typequiz" && typeof initTypeQuiz === "function") initTypeQuiz();
 }
 
 /* ===========================
