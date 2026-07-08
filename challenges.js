@@ -217,14 +217,14 @@ function recordBattleInChallenges(correct) {
 
 function recordTypeQuizInChallenges(result) {
     const state = getChallengeState();
-    if (result === "correct" || result === "wrong") state.typeQuizTotal++;
+    if (result === "correct" || result === "wrong" || result === "almost") state.typeQuizTotal++;
     if (result === "correct") {
         state.typeQuizWins++;
         state.currentTypeQuizStreak++;
         if (state.currentTypeQuizStreak > state.bestTypeQuizStreak) {
             state.bestTypeQuizStreak = state.currentTypeQuizStreak;
         }
-    } else if (result === "wrong") {
+    } else if (result === "wrong" || result === "almost") {
         state.currentTypeQuizStreak = 0;
     }
     saveChallengeState(state);

@@ -144,9 +144,7 @@ function toggleTypeQuizType(type) {
     if (typeQuizSelected.has(type)) {
         typeQuizSelected.delete(type);
     } else {
-        const actualCount = getPokemonTypes(typeQuizPokemon.id).length;
-        const maxPick = actualCount >= 2 ? 2 : 1;
-        if (typeQuizSelected.size >= maxPick) {
+        if (typeQuizSelected.size >= 2) {
             const first = typeQuizSelected.values().next().value;
             typeQuizSelected.delete(first);
         }
@@ -160,10 +158,12 @@ function evaluateTypeGuess(selected, actual) {
     const hits = selected.filter(t => actualSet.has(t));
 
     if (actual.length === 1) {
-        return selected.length === 1 && hits.length === 1 ? "correct" : "wrong";
+        if (hits.length === 1 && selected.length === 1) return "correct";
+        if (hits.length === 1) return "almost";
+        return "wrong";
     }
 
-    if (selected.length === 2 && hits.length === 2) return "correct";
+    if (hits.length === 2 && selected.length === 2) return "correct";
     if (hits.length === 1) return "almost";
     return "wrong";
 }
@@ -176,12 +176,14 @@ function recordTypeQuizResult(result) {
         stats.correct++;
         stats.currentStreak++;
         if (stats.currentStreak > stats.bestStreak) stats.bestStreak = stats.currentStreak;
+    } else if (result === "almost") {
+        stats.total++;
+        stats.almost = (stats.almost || 0) + 1;
+        stats.currentStreak = 0;
     } else if (result === "wrong") {
         stats.total++;
         stats.wrong++;
         stats.currentStreak = 0;
-    } else if (result === "almost") {
-        stats.almost = (stats.almost || 0) + 1;
     }
 
     saveTypeQuizStats(stats);
@@ -223,13 +225,27 @@ function submitTypeGuess() {
     }
 
     if (result === "almost") {
+        typeQuizAttempts--;
         recordTypeQuizResult("almost");
-        renderTypeQuizFeedback(
-            `<strong>🔶 Ci sei quasi!</strong> Hai indovinato uno dei tipi, ma ${name} ne ha ${actual.length}.`,
-            "almost"
-        );
-        typeQuizSelected.clear();
-        renderTypeQuizGrid();
+        if (typeQuizAttempts <= 0) {
+            typeQuizLocked = true;
+            renderTypeQuizFeedback(
+                `<strong>🔶 Ci sei quasi… ma no!</strong> ${name} è di tipo ${typeLabelsHTML(actual)}.`,
+                "wrong"
+            );
+            setTimeout(() => pickRandomTypeQuizPokemon(), 2800);
+        } else {
+            const hint = actual.length === 1
+                ? "Hai messo un tipo in più!"
+                : "Hai indovinato uno dei tipi, ma non basta.";
+            renderTypeQuizFeedback(
+                `<strong>🔶 Ci sei quasi!</strong> ${hint} Tentativi rimasti: ${typeQuizAttempts}.`,
+                "almost"
+            );
+            typeQuizSelected.clear();
+            renderTypeQuizGrid();
+        }
+        renderTypeQuiz();
         return;
     }
 
