@@ -27,6 +27,7 @@ const CHALLENGE_POOL = [
     { type: "gen_percent", gen: 1, target: 30, label: "Completa almeno il {n}% della Gen I" },
     { type: "gen_percent", gen: 2, target: 25, label: "Completa almeno il {n}% della Gen II" },
     { type: "new_mega", target: 2, label: "Ottieni {n} forme Mega/Gigamax" },
+    { type: "new_exv", target: 2, label: "Ottieni {n} carte EX o V" },
     { type: "collect_type_total", pokeType: "dragon", target: 10, label: "Possiedi almeno {n} Pokémon Drago (totali)" },
     { type: "collect_type_total", pokeType: "ghost", target: 8, label: "Possiedi almeno {n} Pokémon Spettro (totali)" }
 ];
@@ -91,6 +92,7 @@ function getChallengeState() {
                 owned: [...ownedSet],
                 shiny: [...shinySet],
                 mega: JSON.parse(localStorage.getItem("ownedMega") || "[]"),
+                exv: JSON.parse(localStorage.getItem("ownedExV") || "[]"),
                 battleWins: 0
             },
             battleWins: 0,
@@ -161,6 +163,12 @@ function countNewMega(state) {
     return mega.filter(m => !base.has(m)).length;
 }
 
+function countNewExV(state) {
+    const base = new Set(state.baseline.exv || []);
+    const exv = JSON.parse(localStorage.getItem("ownedExV") || "[]");
+    return exv.filter(e => !base.has(e)).length;
+}
+
 function getChallengeProgress(challenge, state) {
     switch (challenge.type) {
         case "new_owned": return { current: countNewOwned(state), target: challenge.target };
@@ -175,6 +183,7 @@ function getChallengeProgress(challenge, state) {
         case "type_quiz_streak": return { current: state.bestTypeQuizStreak, target: challenge.target };
         case "gen_percent": return { current: genPercent(challenge.gen), target: challenge.target };
         case "new_mega": return { current: countNewMega(state), target: challenge.target };
+        case "new_exv": return { current: countNewExV(state), target: challenge.target };
         case "collect_type_total": return { current: countTypeTotal(challenge.pokeType), target: challenge.target };
         default: return { current: 0, target: 1 };
     }

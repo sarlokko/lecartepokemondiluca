@@ -122,15 +122,25 @@ function decodeMega(encoded) {
     return JSON.parse(decodeURIComponent(escape(atob(fromBase64Url(encoded)))));
 }
 
+function encodeExV(ownedExV) {
+    return toBase64Url(btoa(unescape(encodeURIComponent(JSON.stringify(ownedExV)))));
+}
+
+function decodeExV(encoded) {
+    return JSON.parse(decodeURIComponent(escape(atob(fromBase64Url(encoded)))));
+}
+
 function generateQRCode() {
     const owned = [...ownedSet];
     const ownedMega = JSON.parse(localStorage.getItem("ownedMega") || "[]");
+    const ownedExV = JSON.parse(localStorage.getItem("ownedExV") || "[]");
     const ownedShiny = [...shinySet];
     const bitset = encodeOwnedBitset(owned);
     const shinyBitset = encodeOwnedBitset(ownedShiny);
     const mega = encodeMega(ownedMega);
+    const exv = encodeExV(ownedExV);
     const baseUrl = window.location.href.split("?")[0];
-    const syncUrl = baseUrl + "?sync=" + bitset + "&shiny=" + shinyBitset + "&mega=" + mega;
+    const syncUrl = baseUrl + "?sync=" + bitset + "&shiny=" + shinyBitset + "&mega=" + mega + "&exv=" + exv;
 
     const qrContainer = document.getElementById("qrcode");
     qrContainer.innerHTML = "";
@@ -185,11 +195,23 @@ function generateQRCode() {
             } catch (_) {}
         }
 
+        let exvCount = 0;
+        if (params.has("exv")) {
+            try {
+                const exvList = decodeExV(params.get("exv"));
+                if (Array.isArray(exvList)) {
+                    localStorage.setItem("ownedExV", JSON.stringify(exvList));
+                    exvCount = exvList.length;
+                }
+            } catch (_) {}
+        }
+
         history.replaceState({}, "", window.location.pathname);
         showToast(
             "Sincronizzazione completata! Carte: " + (ownedIds ? ownedIds.length : 0) +
             (shinyCount ? " | Shiny: " + shinyCount : "") +
-            (megaCount ? " | Mega: " + megaCount : "")
+            (megaCount ? " | Mega: " + megaCount : "") +
+            (exvCount ? " | EX/V: " + exvCount : "")
         );
         updateProgressDashboard();
     } catch (e) {
@@ -210,6 +232,7 @@ function updateProgressDashboard() {
     const shiny = shinySet.size;
     const pct = Math.round((owned / TOTAL_POKEMON) * 100);
     const mega = JSON.parse(localStorage.getItem("ownedMega") || "[]").length;
+    const exv = JSON.parse(localStorage.getItem("ownedExV") || "[]").length;
 
     let genBars = "";
     GENERATIONS.forEach(g => {
@@ -229,6 +252,7 @@ function updateProgressDashboard() {
             <div class="stat-box"><span class="stat-num">${owned}</span><span class="stat-label">/ ${TOTAL_POKEMON} carte</span></div>
             <div class="stat-box shiny-stat"><span class="stat-num">✨ ${shiny}</span><span class="stat-label">Shiny</span></div>
             <div class="stat-box"><span class="stat-num">${mega}</span><span class="stat-label">Mega/Gmax</span></div>
+            <div class="stat-box"><span class="stat-num">${exv}</span><span class="stat-label">EX/V</span></div>
             <div class="stat-box"><span class="stat-num">${pct}%</span><span class="stat-label">Completamento</span></div>
         </div>
         <div class="overall-progress">
@@ -355,7 +379,11 @@ function showTab(tab) {
         window.__megamaxLoaded = true;
         renderMegaGmax();
     }
-    if (tab !== "megamax" && tab !== "battle" && tab !== "typequiz") renderActiveTab();
+    if (tab === "exv" && !window.__exvLoaded) {
+        window.__exvLoaded = true;
+        renderExV();
+    }
+    if (tab !== "megamax" && tab !== "exv" && tab !== "battle" && tab !== "typequiz") renderActiveTab();
     if (tab === "battle" && typeof renderBattleStats === "function") renderBattleStats();
     if (tab === "typequiz" && typeof initTypeQuiz === "function") initTypeQuiz();
 }
