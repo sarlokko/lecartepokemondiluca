@@ -39,9 +39,9 @@
         <button onclick="showTab('select')" id="tab-select">Seleziona</button>
         <button onclick="showTab('owned')" id="tab-owned">Possedute</button>
         <button onclick="showTab('missing')" id="tab-missing">Mancanti</button>
-        <button onclick="showTab('shiny')" id="tab-shiny">Shiny ✨</button>
         <button onclick="showTab('battle')" id="tab-battle">Lotte</button>
         <button onclick="showTab('typequiz')" id="tab-typequiz">Di che tipo è?</button>
+        <button onclick="showTab('shiny')" id="tab-shiny">Shiny ✨</button>
         <button onclick="showTab('megamax')" id="tab-megamax">Mega/Gigamax</button>
         <button onclick="showTab('exv')" id="tab-exv">EX/V</button>
         <button onclick="showTab('challenges')" id="tab-challenges">Sfide 🏆</button>
@@ -92,12 +92,6 @@
         <div id="pagination-missing"></div>
     </div>
 
-    <div id="shiny" class="tab" style="display:none;">
-        <p class="tab-hint">✨ Segna gli Shiny posseduti — devi avere la carta normale prima!</p>
-        <div id="list-shiny" class="list-container"></div>
-        <div id="pagination-shiny"></div>
-    </div>
-
     <div id="battle" class="tab" style="display:none;">
         <div class="battle-header">
             <h2 class="battle-title">⚔️ Arena Lotte</h2>
@@ -130,6 +124,12 @@
             <button type="button" onclick="submitTypeGuess()" class="btn-green btn-typequiz-guess">Indovina</button>
             <button type="button" onclick="skipTypeQuizPokemon()" class="btn-red btn-typequiz-skip">Salta</button>
         </div>
+    </div>
+
+    <div id="shiny" class="tab" style="display:none;">
+        <p class="tab-hint">✨ Segna gli Shiny posseduti — devi avere la carta normale prima!</p>
+        <div id="list-shiny" class="list-container"></div>
+        <div id="pagination-shiny"></div>
     </div>
 
     <div id="megamax" class="tab" style="display:none;">
