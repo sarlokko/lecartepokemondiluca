@@ -17,6 +17,7 @@
     <script src="pokemon-list.js"></script>
     <script src="pokemon-types.js"></script>
     <script src="mega-gmax-list.js"></script>
+    <script src="ex-v-list.js"></script>
 </head>
 <body>
     <div class="header-bar">
@@ -42,6 +43,7 @@
         <button onclick="showTab('battle')" id="tab-battle">Lotte</button>
         <button onclick="showTab('typequiz')" id="tab-typequiz">Di che tipo è?</button>
         <button onclick="showTab('megamax')" id="tab-megamax">Mega/Gigamax</button>
+        <button onclick="showTab('exv')" id="tab-exv">EX/V</button>
         <button onclick="showTab('challenges')" id="tab-challenges">Sfide 🏆</button>
     </nav>
 
@@ -134,6 +136,11 @@
         <div id="list-megagmax" class="list-container"></div>
     </div>
 
+    <div id="exv" class="tab" style="display:none;">
+        <p class="tab-hint">Carte EX e V — clicca per segnare come posseduta</p>
+        <div id="list-exv" class="list-container"></div>
+    </div>
+
     <div id="challenges" class="tab" style="display:none;">
         <div id="challenges-content"></div>
     </div>
@@ -146,5 +153,6 @@
     <script src="battle.js"></script>
     <script src="typequiz.js"></script>
     <script src="megamax.js"></script>
+    <script src="exv.js"></script>
 </body>
 </html>

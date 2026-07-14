@@ -849,6 +849,40 @@ nav button.active {
 .mega-loading, .mega-empty { width: 100%; text-align: center; padding: 30px; }
 .mega-error { color: #c62828; }
 
+/* ===========================
+   EX / V
+=========================== */
+.exv-header {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0 4px;
+}
+.exv-counter { font-weight: bold; color: #2a75bb; }
+.exv-hint { color: #888; font-size: 13px; margin-left: 10px; }
+.exv-card-name { font-size: 13px !important; }
+.exv-form-img { min-height: 100px; object-fit: contain; }
+.exv-img-placeholder {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 28px;
+}
+.exv-kind-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+}
+.badge-ex { background: #d97706; }
+.badge-v { background: #0891b2; }
+.exv-card.owned { border-color: #2e7d32; background: #e8f5e9; }
+.exv-empty { width: 100%; text-align: center; padding: 30px; }
+
 @media (max-width: 600px) {
     .battle-title { font-size: 12px; }
     .battle-stat-pill { min-width: 70px; padding: 8px 10px; }
