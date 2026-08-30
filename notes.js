@@ -1,11 +1,7 @@
 /* Note per carta — solo sulle possedute */
 
 function getNotes() {
-    try {
-        return JSON.parse(localStorage.getItem("cardNotes") || "{}");
-    } catch {
-        return {};
-    }
+    return storageGetJSON("cardNotes", {});
 }
 
 function getNote(id) {
@@ -20,7 +16,7 @@ function saveNote(id, text) {
     } else {
         delete notes[String(id)];
     }
-    localStorage.setItem("cardNotes", JSON.stringify(notes));
+    storageSetJSON("cardNotes", notes);
 }
 
 function deleteNote(id) {

@@ -1,0 +1,14 @@
+services:
+  luca-pokemon:
+    build: .
+    container_name: luca-pokemon
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./data:/app/data
+    environment:
+      PORT: "8085"
+      DATA_FILE: /app/data/collection.json
+      # Opzionale: imposta un token per proteggere le modifiche
+      # SYNC_TOKEN: "cambia-questo-token"
+    restart: unless-stopped

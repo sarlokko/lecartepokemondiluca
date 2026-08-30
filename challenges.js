@@ -77,12 +77,7 @@ function pickChallenges(weekKey) {
 
 function getChallengeState() {
     const weekKey = getWeekKey();
-    let state;
-    try {
-        state = JSON.parse(localStorage.getItem("challengeState") || "null");
-    } catch {
-        state = null;
-    }
+    let state = storageGetJSON("challengeState", null);
 
     if (!state || state.weekKey !== weekKey) {
         state = {
@@ -91,8 +86,8 @@ function getChallengeState() {
             baseline: {
                 owned: [...ownedSet],
                 shiny: [...shinySet],
-                mega: JSON.parse(localStorage.getItem("ownedMega") || "[]"),
-                exv: JSON.parse(localStorage.getItem("ownedExV") || "[]"),
+                mega: storageGetJSON("ownedMega", []),
+                exv: storageGetJSON("ownedExV", []),
                 battleWins: 0
             },
             battleWins: 0,
@@ -105,7 +100,7 @@ function getChallengeState() {
             currentTypeQuizStreak: 0,
             completedIds: []
         };
-        localStorage.setItem("challengeState", JSON.stringify(state));
+        storageSetJSON("challengeState", state);
     } else {
         if (state.battleTotal == null) state.battleTotal = state.battleWins || 0;
         if (state.bestBattleStreak == null) state.bestBattleStreak = 0;
@@ -119,7 +114,7 @@ function getChallengeState() {
 }
 
 function saveChallengeState(state) {
-    localStorage.setItem("challengeState", JSON.stringify(state));
+    storageSetJSON("challengeState", state);
 }
 
 function countNewOwned(state) {
@@ -159,13 +154,13 @@ function genPercent(gen) {
 
 function countNewMega(state) {
     const base = new Set(state.baseline.mega);
-    const mega = JSON.parse(localStorage.getItem("ownedMega") || "[]");
+    const mega = storageGetJSON("ownedMega", []);
     return mega.filter(m => !base.has(m)).length;
 }
 
 function countNewExV(state) {
     const base = new Set(state.baseline.exv || []);
-    const exv = JSON.parse(localStorage.getItem("ownedExV") || "[]");
+    const exv = storageGetJSON("ownedExV", []);
     return exv.filter(e => !base.has(e)).length;
 }
 

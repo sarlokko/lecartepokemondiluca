@@ -8,15 +8,13 @@ let battler2 = null;
 const BATTLE_STATS_KEY = "battleStatsAllTime";
 
 function getBattleStats() {
-    try {
-        const s = JSON.parse(localStorage.getItem(BATTLE_STATS_KEY) || "null");
-        if (s) return s;
-    } catch (_) {}
+    const s = storageGetJSON(BATTLE_STATS_KEY, null);
+    if (s) return s;
     return { correct: 0, wrong: 0, total: 0, bestStreak: 0, currentStreak: 0 };
 }
 
 function saveBattleStats(stats) {
-    localStorage.setItem(BATTLE_STATS_KEY, JSON.stringify(stats));
+    storageSetJSON(BATTLE_STATS_KEY, stats);
 }
 
 function shuffleArray(arr) {

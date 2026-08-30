@@ -5,11 +5,11 @@
 let megaGmaxCache = null;
 
 function getOwnedMega() {
-    return JSON.parse(localStorage.getItem("ownedMega") || "[]");
+    return storageGetJSON("ownedMega", []);
 }
 
 function saveOwnedMega(list) {
-    localStorage.setItem("ownedMega", JSON.stringify(list));
+    storageSetJSON("ownedMega", list);
 }
 
 function getBasePokemonImg(dexNumber) {

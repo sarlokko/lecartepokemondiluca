@@ -3,11 +3,11 @@
 =========================== */
 
 function getOwnedExV() {
-    return JSON.parse(localStorage.getItem("ownedExV") || "[]");
+    return storageGetJSON("ownedExV", []);
 }
 
 function saveOwnedExV(list) {
-    localStorage.setItem("ownedExV", JSON.stringify(list));
+    storageSetJSON("ownedExV", list);
 }
 
 function getExVImg(entry) {

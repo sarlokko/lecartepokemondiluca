@@ -6,15 +6,15 @@ let allCards = POKEMON_LIST;
 let filtered = allCards;
 let currentGen = 1;
 let activeTab = "home";
-let ownedSet = new Set(getOwnedArray());
-let shinySet = new Set(getOwnedShinyArray());
+let ownedSet = new Set();
+let shinySet = new Set();
 
 function getOwnedShinyArray() {
-    return JSON.parse(localStorage.getItem("ownedShiny") || "[]");
+    return storageGetJSON("ownedShiny", []);
 }
 
 function saveOwnedShinyFromSet(set) {
-    localStorage.setItem("ownedShiny", JSON.stringify([...set].sort((a, b) => a - b)));
+    storageSetJSON("ownedShiny", [...set].sort((a, b) => a - b));
 }
 
 const GENERATIONS = [
@@ -65,11 +65,11 @@ function getPokemonTypes(id) {
 =========================== */
 
 function getOwnedArray() {
-    return JSON.parse(localStorage.getItem("ownedCards") || "[]");
+    return storageGetJSON("ownedCards", []);
 }
 
 function saveOwnedFromSet() {
-    localStorage.setItem("ownedCards", JSON.stringify([...ownedSet].sort((a, b) => a - b)));
+    storageSetJSON("ownedCards", [...ownedSet].sort((a, b) => a - b));
 }
 
 /* ===========================
@@ -132,8 +132,8 @@ function decodeExV(encoded) {
 
 function generateQRCode() {
     const owned = [...ownedSet];
-    const ownedMega = JSON.parse(localStorage.getItem("ownedMega") || "[]");
-    const ownedExV = JSON.parse(localStorage.getItem("ownedExV") || "[]");
+    const ownedMega = storageGetJSON("ownedMega", []);
+    const ownedExV = storageGetJSON("ownedExV", []);
     const ownedShiny = [...shinySet];
     const bitset = encodeOwnedBitset(owned);
     const shinyBitset = encodeOwnedBitset(ownedShiny);
@@ -189,7 +189,7 @@ function generateQRCode() {
             try {
                 const megaList = decodeMega(params.get("mega"));
                 if (Array.isArray(megaList)) {
-                    localStorage.setItem("ownedMega", JSON.stringify(megaList));
+                    storageSetJSON("ownedMega", megaList);
                     megaCount = megaList.length;
                 }
             } catch (_) {}
@@ -200,7 +200,7 @@ function generateQRCode() {
             try {
                 const exvList = decodeExV(params.get("exv"));
                 if (Array.isArray(exvList)) {
-                    localStorage.setItem("ownedExV", JSON.stringify(exvList));
+                    storageSetJSON("ownedExV", exvList);
                     exvCount = exvList.length;
                 }
             } catch (_) {}
@@ -231,8 +231,8 @@ function updateProgressDashboard() {
     const owned = ownedSet.size;
     const shiny = shinySet.size;
     const pct = Math.round((owned / TOTAL_POKEMON) * 100);
-    const mega = JSON.parse(localStorage.getItem("ownedMega") || "[]").length;
-    const exv = JSON.parse(localStorage.getItem("ownedExV") || "[]").length;
+    const mega = storageGetJSON("ownedMega", []).length;
+    const exv = storageGetJSON("ownedExV", []).length;
 
     let genBars = "";
     GENERATIONS.forEach(g => {
@@ -437,7 +437,7 @@ function toggleOwned(id) {
    INIT
 =========================== */
 
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
     const btn = document.getElementById("qrSyncBtn");
     if (btn) {
         btn.addEventListener("click", () => {
@@ -450,6 +450,11 @@ window.addEventListener("load", () => {
             }
         });
     }
+
+    await initAppStorage();
+    ownedSet = new Set(getOwnedArray());
+    shinySet = new Set(getOwnedShinyArray());
+
     updateProgressDashboard();
     renderActiveTab();
     getChallengeState();

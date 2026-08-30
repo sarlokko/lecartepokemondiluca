@@ -191,15 +191,48 @@ nav button.active {
    HEADER
 =========================== */
 .header-bar {
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
     padding: 0 20px;
     margin-top: 10px;
 }
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+.sync-indicator {
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+.sync-on {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+.sync-off {
+    background: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
+}
+.backup-btn {
+    padding: 8px 10px;
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+}
+.backup-btn:hover { background: #e8e8e8; }
 .qr-btn {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
     padding: 8px 14px;
     background-color: #2a75bb;
     color: white;

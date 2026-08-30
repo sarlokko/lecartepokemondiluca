@@ -22,7 +22,13 @@
 <body>
     <div class="header-bar">
         <h1>Le Carte Pokémon di Luca</h1>
-        <button id="qrSyncBtn" class="qr-btn">Aggiorna 🔄</button>
+        <div class="header-actions">
+            <span id="sync-indicator" class="sync-indicator sync-off" title="Stato sincronizzazione">📱 Locale</span>
+            <button type="button" onclick="exportLocalBackup()" class="backup-btn" title="Scarica backup JSON">💾</button>
+            <input type="file" id="backup-file-input" accept=".json,application/json" style="display:none" onchange="if(this.files[0]) importBackupFile(this.files[0]); this.value=''">
+            <button type="button" onclick="document.getElementById('backup-file-input').click()" class="backup-btn" title="Ripristina da backup JSON">📂</button>
+            <button id="qrSyncBtn" class="qr-btn">Aggiorna 🔄</button>
+        </div>
     </div>
 
     <div id="qrContainer" class="qr-container" style="display:none;">
@@ -146,6 +152,7 @@
     </div>
 
     <script src="ui.js"></script>
+    <script src="storage.js"></script>
     <script src="notes.js"></script>
     <script src="script.js"></script>
     <script src="shiny.js"></script>
