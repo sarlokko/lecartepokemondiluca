@@ -75,6 +75,12 @@ Dovresti vedere **☁️ NAS** nell'header (sync attiva).
 
 Installa Tailscale sul NAS e sui dispositivi → accedi via IP Tailscale.
 
+### Cloudflare Tunnel (accesso esterno con dominio)
+
+Riusa il tunnel già usato per **easyproxy**: guida completa in **`CLOUDFLARE_TUNNEL.md`**.
+
+In breve: Zero Trust → Tunnels → tunnel easyproxy → **Add public hostname** → `localhost:8085`.
+
 ---
 
 ## Token di sicurezza (opzionale)
