@@ -18,15 +18,13 @@ let typeQuizSelected = new Set();
 let typeQuizLocked = false;
 
 function getTypeQuizStats() {
-    try {
-        const s = JSON.parse(localStorage.getItem(TYPE_QUIZ_STATS_KEY) || "null");
-        if (s) return s;
-    } catch (_) {}
+    const s = storageGetJSON(TYPE_QUIZ_STATS_KEY, null);
+    if (s) return s;
     return { correct: 0, wrong: 0, total: 0, almost: 0, bestStreak: 0, currentStreak: 0 };
 }
 
 function saveTypeQuizStats(stats) {
-    localStorage.setItem(TYPE_QUIZ_STATS_KEY, JSON.stringify(stats));
+    storageSetJSON(TYPE_QUIZ_STATS_KEY, stats);
 }
 
 function typeLabelsHTML(types) {

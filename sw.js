@@ -1,9 +1,10 @@
-const CACHE = "luca-pokemon-v10";
+const CACHE = "luca-pokemon-v11";
 const ASSETS = [
     "./",
     "./index.html",
     "./style.css",
     "./script.js",
+    "./storage.js",
     "./ui.js",
     "./notes.js",
     "./shiny.js",
